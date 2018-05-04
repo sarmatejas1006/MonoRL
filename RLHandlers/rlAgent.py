@@ -223,3 +223,27 @@ class RLAgent(Player):
         for i in range(len(tempQ)):
             # Run netowrk for action i,j to given observation
             input = self.createInput(obs, i - 1)
+            tempQ[i] = 0.0  # network output
+        return tempQ
+
+    # Update traces -- qlearning---Peng's Q(λ)
+    def updateQTraces(self, obs, a, reward):
+        found = False
+        # Since the state space is huge we'll use a similarity function to decide whether two states are similar enough
+        for i in range(len(self.traces)):
+            pass
+
+    # Update traces  -- sarsa
+    def updateSTraces(self, obs, a):
+        return False
+
+    # Calculate similarity of states
+    def checkStateSimilarity(self, obs1, obs2):
+
+        similar = True
+
+        # Check money similarity
+        # Check area similarity
+        return similar
+
+
