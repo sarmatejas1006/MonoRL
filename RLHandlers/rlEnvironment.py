@@ -149,5 +149,5 @@ class RLEnvironment:
                 i = c.getGroup()
         return self.groupCardColour[i]
 
-    # Get specific positions of CommandCards
+    # Get specific positions of CommandCard
 
