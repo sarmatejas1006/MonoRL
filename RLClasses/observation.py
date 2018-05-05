@@ -8,7 +8,7 @@ class Observation(object):
     position = ObsPosition()
     finance = ObsFinance()
 
-    def __init__(self, pArea, pPosition, pFinance):
+    def __init__(self, pArea=area, pPosition=position, pFinance=finance):
         self.area = pArea
         self.position = pPosition
         self.finance = pFinance

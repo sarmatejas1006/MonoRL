@@ -1,5 +1,9 @@
+import os
+import xml.etree.ElementTree as ET
 from Classes.card import Card
 from Classes.specialPositonCard import SpecialPositionCard
+from Classes.propertyCard import PropertyCard
+from RLHandlers.rlEnvironment import  RLEnvironment
 
 
 class InitMethods(object):
@@ -7,9 +11,22 @@ class InitMethods(object):
     # ######### Region SetMethods #########
 
     def setCommandCards(self):
+
         try:
-            # Create XML reader to store the commandCards
-            pass
+            # XML reader to store the commandCards
+            if os.path.isfile(self.file_name):
+
+                tree = ET.parse(self.file_name)
+                root_node = tree.getroot()
+
+                for node in root_node:
+                    p_card = PropertyCard(node.find('Name').text, node.find('Position').text, node.find('Price').text,
+                                          'nns', node.find('Mortgage').text, node.find('HouseCost').text,
+                                          node.find('HotelCost').text, node.find('Group').text)
+                    self.p_cards.append(p_card)
+
+                for p_card in self.p_cards:
+                    print(p_card.card_name)
         except Exception as e:
             print('Exception encountered: ', str(e))
             return False
