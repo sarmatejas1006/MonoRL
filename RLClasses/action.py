@@ -1,5 +1,5 @@
 class Action(object):
-    action = None  # int
+    action = 0  # int
 
     def __init__(self, v):
         self.action = v
