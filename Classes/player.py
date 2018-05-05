@@ -73,4 +73,15 @@ class Player(object):
 
     # TODO
     # Set neural network
+    def setNeural(self, network):
+        pass
+
     # Get neural network
+    # def getNeural(self):
+    #     inputLayer = [None]*23
+    #     outputLayer = [None]*100
+    #     return [inputLayer, outputLayer]
+
+    # save agent
+    def saveOnFile(self, p):
+        pass

@@ -7,6 +7,9 @@
       <w>maxhouses</w>
       <w>maxplayers</w>
       <w>maxsteps</w>
+      <w>mult</w>
+      <w>qlearning</w>
+      <w>sarsa</w>
       <w>unmortgage</w>
       <w>winreward</w>
     </words>

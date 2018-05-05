@@ -1,5 +1,5 @@
 class ObsArea(object):
-    gameGroupInfo = None  # double
+    gameGroupInfo = []  # double
 
     def __init__(self):
-        pass
+        self.gameGroupInfo = []
