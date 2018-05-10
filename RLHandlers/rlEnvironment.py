@@ -26,8 +26,7 @@ class RLEnvironment(object):
     rlEnv = None
 
     def __init__(self):
-        self.methods = ActionMethods(self.get_instance())
-
+        pass
 
     def get_instance(self):
 
@@ -69,7 +68,7 @@ class RLEnvironment(object):
     totalGames = 0
 
     # Action methods
-    # methods = ActionMethods()
+    methods = ActionMethods(object)
 
     # Current player and current position value
     currentPlayer = 0
@@ -836,7 +835,7 @@ class RLEnvironment(object):
 
             self.gamePlayers.append(RLAgent())
             # System.Threading.Thread.Sleep(100)
-            #time.sleep(100)
+            time.sleep(100)
 
             self.gamePlayers[i].agent_init('q', False, "Agent" + str(i), (23))
             #agent type(random-qlearning, policyFrozen, name, input vector length
@@ -853,7 +852,7 @@ class RLEnvironment(object):
         # Start the games
         for self.currentGame in range(self.totalGames):
             # System.Threading.Thread.Sleep(100)
-            #time.sleep(100)
+            time.sleep(100)
 
             self.Awriter.write("---------------------------------"+"\n")
 
@@ -886,7 +885,7 @@ class RLEnvironment(object):
     def env_start(self):
 
         # System.Threading.Thread.Sleep(100)
-        #time.sleep(100)
+        time.sleep(100)
 
         # Start new game
         self.initGameParameters()
