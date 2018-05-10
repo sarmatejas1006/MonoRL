@@ -1,3 +1,5 @@
+import sys
+sys.path.append("/Users/maitraikansal/PycharmProjects/MonoRL")
 from RLClasses.actionMethods import ActionMethods
 from Classes.player import Player
 from Classes.board import Board
@@ -16,21 +18,22 @@ from Classes.propertyCard import PropertyCard
 import os
 import math
 import random
+import time
 
 
 class RLEnvironment(object):
 
-    # rlEnv = object
-    #
-    # def __init__(self):
-    #     pass
-    #
-    # def get_instance(self):
-    #
-    #     if self.rlEnv is None:
-    #         self.rlEnv = RLEnvironment()
-    #
-    #     return self.rlEnv
+    rlEnv = None
+
+    def __init__(self):
+        pass
+
+    def get_instance(self):
+
+        if self.rlEnv is None:
+            self.rlEnv = RLEnvironment()
+
+        return self.rlEnv
 
     Awriter = open("actions.txt","w")
 
@@ -65,7 +68,7 @@ class RLEnvironment(object):
     totalGames = 0
 
     # Action methods
-    methods = ActionMethods()
+    methods = ActionMethods(object)
 
     # Current player and current position value
     currentPlayer = 0
@@ -472,6 +475,7 @@ class RLEnvironment(object):
     def movePlayer(self, playerToMove):
 
         # System.Threading.Thread.Sleep(10)
+        time.sleep(10)
 
         #Calculate the positions to move
 
@@ -747,10 +751,9 @@ class RLEnvironment(object):
     def inJailPosition(self):
 
         # System.Threading.Thread.Sleep(5)
-        rnd = random.randint(1,100)
-
-        dice1 = rnd.Next(1, 10000) % 6 + 1
-        dice2 = rnd.Next(1, 10000) % 6 + 1
+        time.sleep(5)
+        dice1 = random.randint(1, 6)
+        dice2 = random.randint(1, 6)
 
         # Get gim out of jail
         if dice1 == dice2:
@@ -832,6 +835,7 @@ class RLEnvironment(object):
 
             self.gamePlayers.append(RLAgent())
             # System.Threading.Thread.Sleep(100)
+            time.sleep(100)
 
             self.gamePlayers[i].agent_init('q', False, "Agent" + str(i), (23))
             #agent type(random-qlearning, policyFrozen, name, input vector length
@@ -848,6 +852,7 @@ class RLEnvironment(object):
         # Start the games
         for self.currentGame in range(self.totalGames):
             # System.Threading.Thread.Sleep(100)
+            time.sleep(100)
 
             self.Awriter.write("---------------------------------"+"\n")
 
@@ -880,6 +885,7 @@ class RLEnvironment(object):
     def env_start(self):
 
         # System.Threading.Thread.Sleep(100)
+        time.sleep(100)
 
         # Start new game
         self.initGameParameters()
@@ -953,6 +959,7 @@ class RLEnvironment(object):
 
         # For some reason it's freaking freezing...
         # System.Threading.Thread.Sleep(15)
+        time.sleep(15)
 
         # Since it's a new player he definately hasn't rolled any doubles yet
         self.doublesInRow = 0
@@ -1077,6 +1084,7 @@ class RLEnvironment(object):
         action = 0
         # Pause thread
         # System.Threading.Thread.Sleep(15)
+        time.sleep(15)
 
         # If the current player is agent then sent him a message
         action = self.gamePlayers[self.currentPlayer].agent_start(obs)
@@ -1172,6 +1180,7 @@ class RLEnvironment(object):
 
                         # Pause thread
                         # System.Threading.Thread.Sleep(20)
+                        time.sleep(20)
 
                         # Create an instance of the observation class
 
@@ -1197,10 +1206,12 @@ class RLEnvironment(object):
                         for i in range(getList):
 
                             # System.Threading.Thread.Sleep(5)
+                            time.sleep(5)
                             self.methods.receiveAction(getList[i])
 
                         for i in range(spendList):
                             # System.Threading.Thread.Sleep(5)
+                            time.sleep(5)
                             self.methods.receiveAction(spendList[i])
 
 
@@ -1250,6 +1261,7 @@ class RLEnvironment(object):
                 if self.gamePlayers[i].isAlive:
                     # Pause thread
                     # System.Threading.Thread.Sleep(20)
+                    time.sleep(20)
 
                     specObs = self.createObservation()
 
@@ -1428,7 +1440,9 @@ class RLEnvironment(object):
         winner.Close()
 
 
-
+if __name__ == "__main__":
+    RLEnvironment().get_instance().env_init()
+    RLEnvironment().get_instance().playGame()
 
 
 

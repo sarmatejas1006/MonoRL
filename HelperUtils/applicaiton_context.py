@@ -1,11 +1,10 @@
 import sys
-sys.path.append("/Users/maitraikansal/PycharmProjects/MonoRL")
 from RLHandlers.rlEnvironment import RLEnvironment
 
 
 class ApplicationContext(object):
 
-    rlEnv = RLEnvironment()
+    rlEnv = RLEnvironment().get_instance()
 
     def __init__(self):
         pass
@@ -13,7 +12,7 @@ class ApplicationContext(object):
     def get_instance(self):
 
         if self.rlEnv is None:
-            self.rlEnv = RLEnvironment()
+            self.rlEnv = RLEnvironment().get_instance()
 
         return self.rlEnv
 

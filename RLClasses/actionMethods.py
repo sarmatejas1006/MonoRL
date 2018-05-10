@@ -2,7 +2,11 @@ from MonopolyHandlers.monopolyActions import MonopolyActions
 
 
 class ActionMethods(object):
-    mActions = MonopolyActions()
+
+
+    def __init__(self, obj):
+        self.obj = obj
+        self.mActions = MonopolyActions(obj)
 
     # Receive observation and an action array
     def receiveAction(self, actions):
