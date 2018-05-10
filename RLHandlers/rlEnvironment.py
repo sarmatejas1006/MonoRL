@@ -1,4 +1,3 @@
-from MonopolyHandlers.initMethods import InitMethods
 from RLClasses.actionMethods import ActionMethods
 from Classes.player import Player
 from Classes.board import Board
@@ -10,17 +9,33 @@ from RLClasses.obsArea import ObsArea
 from RLClasses.obsFinance import ObsFinance
 from RLHandlers.rlAgent import RLAgent
 from HelperUtils.stopwatch import Stopwatch
+import xml.etree.ElementTree as ET
+from Classes.card import Card
+from Classes.specialPositonCard import SpecialPositionCard
+from Classes.propertyCard import PropertyCard
 import os
 import math
 import random
 
 
-class RLEnvironment:
+class RLEnvironment(object):
+
+    # rlEnv = object
+    #
+    # def __init__(self):
+    #     pass
+    #
+    # def get_instance(self):
+    #
+    #     if self.rlEnv is None:
+    #         self.rlEnv = RLEnvironment()
+    #
+    #     return self.rlEnv
 
     Awriter = open("actions.txt","w")
 
     # Handler for the helper methods of the project
-    initMethods = InitMethods()
+    #initMethods = InitMethods()
     # ######### Region Private Fields #########
     # List of winners of every game
     winners = []
@@ -224,7 +239,7 @@ class RLEnvironment:
 
         relativePlayersArea = 0
 
-        if self.board.typeId[self.currentPosition].Equals(0) and self.gamePlayers[self.currentPlayer].isAlive:
+        if (self.board.typeId[self.currentPosition] == 0) and (self.gamePlayers[self.currentPlayer].isAlive):
 
             relativePlayersArea = (self.getCardFromPosition(self.currentPosition).getGroup() + 1) / 10
 
@@ -277,20 +292,19 @@ class RLEnvironment:
                         elif self.properties[int(tmp[j])] != -1:
                             oPlayer = oPlayer + 1
 
+                groupInfo.append([i,int(12 / len(self.gameCardsGroup[i].split(',')) * cPlayer)])
+                groupInfo.append([i, int(12 / len(self.gameCardsGroup[i].split(',')) * oPlayers)])
 
-                        groupInfo[i, 0] = int(12 / len(self.gameCardsGroup[i].split(',')) * cPlayer)
-                        groupInfo[i, 1] = int(12 / len(self.gameCardsGroup[i].split(',')) * oPlayers)
+                if groupInfo[i][1] == 12:
 
-                        if groupInfo[i, 1] == 12:
+                    alivePlayers = 0
+                    for k in range(self.currentPlayers):
 
-                            alivePlayers = 0
-                            for k in range(self.currentPlayers):
-
-                                if (self.gamePlayers[k].isAlive()) and (k != self.currentPlayer):
-                                    alivePlayers = alivePlayers + 1
+                        if (self.gamePlayers[k].isAlive()) and (k != self.currentPlayer):
+                            alivePlayers = alivePlayers + 1
 
 
-                            groupInfo[i, 1] = int(groupInfo[i, 1] / alivePlayers)
+                    groupInfo.append([i,int(groupInfo[i][1] / alivePlayers)])
 
 
 
@@ -311,17 +325,17 @@ class RLEnvironment:
 
 
 
-                groupInfo[i, 1] = 0
-                groupInfo[i, 0] = 12 + tmp
+                groupInfo[i][1] = 0
+                groupInfo[i][0] = 12 + tmp
                 if mortCounter > 0:
-                    groupInfo[i, 0] = 12 - int(12 / len(self.gameCardsGroup[i].split(',')) * mortCounter)
+                    groupInfo[i][0] = 12 - int(12 / len(self.gameCardsGroup[i].split(',')) * mortCounter)
 
 
 
                 else:
 
-                    groupInfo[i, 0] = 0
-                    groupInfo[i, 1] = 12 + tmp
+                    groupInfo[i][0] = 0
+                    groupInfo[i][1] = 12 + tmp
 
 
 
@@ -329,7 +343,7 @@ class RLEnvironment:
 
             for j in range(len(groupInfo[1])):
 
-                    groupInfo[i, j] = float(groupInfo[i, j] / 17)
+                    groupInfo[i][j] = float(groupInfo[i][j] / 17)
 
         area.gameGroupInfo = groupInfo
 
@@ -460,9 +474,9 @@ class RLEnvironment:
         # System.Threading.Thread.Sleep(10)
 
         #Calculate the positions to move
-        rnd = random.randint(1,100)
-        dice1 = rnd.Next(1, 10000) % 6 + 1
-        dice2 = rnd.Next(1, 10000) % 6 + 1
+
+        dice1 = random.randint(1,6)
+        dice2 = random.randint(1,6)
 
         dice = dice1 + dice2
 
@@ -816,13 +830,13 @@ class RLEnvironment:
         # Initialize agents.We 'll use the same for all games during this run
         for i in range(self.currentPlayers):
 
-            self.gamePlayers.Add(RLAgent())
+            self.gamePlayers.append(RLAgent())
             # System.Threading.Thread.Sleep(100)
 
-            self.gamePlayers[i].agent_init('q', False, "Agent" + i.to_string(), (23))
+            self.gamePlayers[i].agent_init('q', False, "Agent" + str(i), (23))
             #agent type(random-qlearning, policyFrozen, name, input vector length
 
-            averageMoney[i] = 0
+            averageMoney.append(0)
 
 
         # Initialize stopwatch
@@ -838,8 +852,8 @@ class RLEnvironment:
             self.Awriter.write("---------------------------------"+"\n")
 
             # Reset and start the timer
-            timer.Reset()
-            timer.Start()
+            timer.reset()
+            #timer.start()
 
             # Initialize stepCounter variable to prevent it from going on forever and determine manually the winner
             self.stepCounter = 0
@@ -899,7 +913,7 @@ class RLEnvironment:
         self.moves.Add(self.stepCounter)
 
         # Stop the timer
-        self.timer.Stop()
+        self.timer.stop()
 
         self.tmp = self.timer.ElapsedMilliseconds
         self.times.Add(self.tmp)
@@ -954,7 +968,7 @@ class RLEnvironment:
 
 
         # Increase his move counter since he's been selected
-        self.playerMoves[self.currentPlayer]  = self.playerMoves[self.currentPlayer] + 1
+        self.playerMoves[self.currentPlayer] = self.playerMoves[self.currentPlayer] + 1
 
         self.stepCounter = self.stepCounter + 1
 
@@ -1020,13 +1034,13 @@ class RLEnvironment:
 
         # Both CommandCards and PropertyCards implement the Card interface
         # Set Command Cards(both Community Chest and Chance cards )
-        self.initMethods.setCommandsCards()
+        self.initialiseCommandCards()
 
         # Set Property Cards
-        self.initMethods.setPropertyCards()
+        self.initialisePropertyCards()
 
         # Create information for every position on board
-        self.initMethods.setBoard()
+        self.initialiseBoard()
 
         self.getOutOfJailTries = []
         self.playerMoves = []
@@ -1040,9 +1054,9 @@ class RLEnvironment:
             for i in range(len(self.gameCardsGroup)):
                 self.completedGroups[i] = -1
 
-            for i in range(self.gamePlayers):
-                self.getOutOfJailTries[i] = 0
-                self.playerMoves[i] = 1
+            for i in range(len(self.gamePlayers)):
+                self.getOutOfJailTries.append(0)
+                self.playerMoves.append(1)
 
 
     # Play first move of the game
@@ -1300,6 +1314,94 @@ class RLEnvironment:
             self.gamePlayers[higherBidder].money -= maxBid
             self.methods.mActions.checkIfCompleted(higherBidder, self.currentPosition)
 
+    # set command card after parsing data from xml file
+    def initialiseCommandCards(self):
+
+        try:
+            # XML reader to store the commandCards
+            if os.path.isfile(self.file_name_command):
+
+                tree = ET.parse(self.file_name_command)
+                root_node = tree.getroot()
+
+                for node in root_node:
+                    p_card = CommandCard(node.find('TypeOfCard').text, node.find('Text').text, node.find('FixedMove').text,
+                                          node.find('Collect').text, node.find('MoneyTransaction').text, node.find('PlayersInteraction').text,
+                                          node.find('HouseMultFactor').text, node.find('HotelMultFactor').text)
+                    self.addCommandCard(p_card)
+
+                    self.setCommandCards()
+
+        except Exception as e:
+            print('Exception encountered: ', str(e))
+            return False
+
+        return True
+
+    # set Property card after parsing data from xml file
+    def initialisePropertyCards(self):
+        try:
+            # XML reader to store the commandCards
+            if os.path.isfile(self.file_name_command):
+
+                tree = ET.parse(self.file_name_command)
+                root_node = tree.getroot()
+
+                for node in root_node:
+                    rent = []
+                    rentString = node.find('Rent').text.split(',')
+                    for s in rentString:
+                        rent.append(int(s));
+
+                    p_card = PropertyCard(node.find('Name').text, node.find('Position').text,
+                                          node.find('Price').text,
+                                          rent,
+                                          node.find('Mortage').text,
+                                          node.find('HouseCost').text,
+                                          node.find('HotelCost').text, node.find('Group').text)
+
+                    self.addPropertyCard(p_card)
+                    self.setPropertyCards()
+
+        except Exception as e:
+            print('Exception encountered: ', str(e))
+            return False
+
+        return True
+
+    def initialiseBoard(self):
+
+        b = [Card() for i in range(40)]  # empty card array
+        t = [-1] * 40  # int array of -1
+
+        # Add PropertyCards
+
+        for i in range(len(self.getCards())):
+           b[self.getCards()[i].getPosition()] = self.getCards()[i]
+           t[self.getCards()[i].getPosition()] = 0
+
+        # Add CommunityChestCards
+
+        for i in range(len(self.getCommunityCardPositions())):
+            b[self.getCommunityCardPositions()[i]] = CommandCard()
+            t[self.getCommunityCardPositions()[i]] = 1
+
+        # Add ChanceCards
+        for i in range(len(self.getChanceCardPositions())):
+            b[self.getChanceCardPositions()[i]] = CommandCard()
+            t[self.getChanceCardPositions()[i]] = 2
+
+
+
+        # Specify that every position left on board is a special position ( GO, Jail, etc... )
+        # We'll take care of what occurs on every case in a different method
+        for i in range(len(b)):
+            if t[i] < 0:
+                t[i] = 3
+                b[i] = SpecialPositionCard()
+
+        # Set the global board parameter
+        self.setBoard(Board(b, t))
 
     # Print experiment's info
     def printInfo(self):

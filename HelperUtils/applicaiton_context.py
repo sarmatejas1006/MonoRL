@@ -18,14 +18,6 @@ class ApplicationContext(object):
         return self.rlEnv
 
 
-if __name__ == '__main__':
-    s1 = ApplicationContext().get_instance()
-    s2 = ApplicationContext().get_instance()
-
-    if s1 == s2:
-        print('singleton')
-    else:
-        print('Diff objects')
 
 
 

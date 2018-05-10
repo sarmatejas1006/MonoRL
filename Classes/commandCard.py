@@ -13,7 +13,7 @@ class CommandCard(Card):
     houseMultFactor = None  # int
     hotelMultFactor = None  # int
 
-    def __init__(self, pType, pText, pFixedMove, pRelativeMove, pCollect, pMoneyTransaction, pPlayerInteraction, pHouseMult, pHotelMult):
+    def __init__(self, pType=None, pText=None, pFixedMove=None, pRelativeMove=None, pCollect=None, pMoneyTransaction=None, pPlayerInteraction=None, pHouseMult=None, pHotelMult=None):
         self.typeOfCard = pType  # int
         self.text = pText  # string
         self.fixedMove = pFixedMove  # string

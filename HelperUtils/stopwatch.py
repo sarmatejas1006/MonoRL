@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 
 class Stopwatch(object):
@@ -11,18 +11,18 @@ class Stopwatch(object):
     def start(self):
         """Starts the timer"""
         if self.start is None:
-            self.start = datetime.datetime.now()
+            self.start = datetime.now()
 
         return self.start
 
     def stop(self):
         """Stops the timer.  Returns the time elapsed"""
-        self.stop = datetime.datetime.now()
+        self.stop = datetime.now()
         duration = self.stop - self.start
         self.start = self.stop
         return duration
 
-    def restart(self):
+    def reset(self):
         """Restart the timer.  Returns the time elapsed"""
-        self.start = datetime.datetime.now()
+        self.start = datetime.now()
         return self.start

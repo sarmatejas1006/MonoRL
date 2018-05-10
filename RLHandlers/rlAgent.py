@@ -198,16 +198,16 @@ class RLAgent(Player):
             self.gamma = 0
         # numberOfProperties = 28
         # Initialize arrays
-        super().propertiesPurchased = [0] * 28
-        super().mortgagedProperties = [0] * 28
-        super().buildingsBuilt = [0] * 28
+        Player.propertiesPurchased = [0] * 28
+        Player.mortgagedProperties = [0] * 28
+        Player.buildingsBuilt = [0] * 28
 
         self.agent_changeCurrentState(Observation)
         self.isAlive = True
-        super().inJail = False
+        Player.inJail = False
 
-        super().money = 1500
-        super().position = 0
+        Player.money = 1500
+        Player.position = 0
 
         self.lastAction = 0
         self.lastState = Observation
