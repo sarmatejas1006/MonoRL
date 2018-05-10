@@ -8,6 +8,7 @@ from RLClasses.observation import Observation
 from RLClasses.obsPosition import ObsPosition
 from RLClasses.obsArea import ObsArea
 from RLClasses.obsFinance import ObsFinance
+from RLHandlers.rlAgent import RLAgent
 import time
 import math
 import random
@@ -537,6 +538,805 @@ class RLEnvironment:
                     if self.gamePlayers[self.currentPlayer].mortgagedProperties[i] == 1:
                         self.gamePlayers[owner].mortgagedProperties[i] = 1
                     self.methods.mActions.checkIfCompleted(owner, self.gameCards[i].getPosition())
+
+    # Apply command card
+    def onCommandCard(self):
+        # Check whether it is a community chest card or a chance card
+        if self.currentPosition in self.communityChestCardsPositions:
+
+        # Take the 1st card of the list, apply it to the game and then move it to the last position
+            self.applyCommandCard(self.communityChestCards[0])
+            self.moveCommunityChestCard();
+
+        else:
+            # Take the !st card of the list, apply it to the game and then move it to the last position
+            self.applyCommandCard(self.chanceCards[0])
+            self.moveChanceCard()
+
+
+    # Move 1st community chest card to the last position
+    def moveCommunityChestCard(self):
+
+        self.communityChestCards.Add(self.communityChestCards[0]);
+        self.communityChestCards.RemoveAt(0);
+
+    # Move 1st chance card to the last position
+    def moveChanceCard(self):
+        self.chanceCards.Add(self.chanceCards[0]);
+        self.chanceCards.RemoveAt(0);
+
+    # Apply a command card to the game state
+    def applyCommandCard(self,commandCard):
+
+        # Initially we check whether it's a fixed move or not
+        if commandCard.fixedMove is not None:
+            # Specify where we're gonna move the player
+            moveTo = int(commandCard.fixedMove)
+            # If the command card specifies him to collect money
+            if commandCard.collect > 0:
+                # Then if he passes through "GO" collect some money otherwise do nothing
+
+                if moveTo - self.currentPosition <= 0:
+                    self.gamePlayers[self.currentPlayer].money += commandCard.moneyTransaction
+            # Change current position
+            self.gamePlayers[self.currentPlayer].position = moveTo
+            currentPosition = moveTo
+            moved = True
+
+        # Relative move
+        elif commandCard.relativeMove is not None:
+            # find the specific position to move
+            # We'll move towards the nearest group
+            if (int(commandCard.relativeMove)) > 0:
+                moveTo = self.findNearestFromGroup(int(commandCard.relativeMove))
+
+                # If the player is to collect money then add the specific amount to his balance
+                if commandCard.collect > 0:
+
+                    if moveTo - self.currentPosition <= 0:
+                        self.gamePlayers[self.currentPlayer].money += commandCard.moneyTransaction;
+
+
+                # Change current position
+                self.gamePlayers[self.currentPlayer].position = moveTo
+                self.currentPosition = moveTo
+                moved = True
+
+
+        else:
+
+            # If the player is to collect money
+            if commandCard.collect > 0:
+
+                # Check whether it is from the other players or from the bank
+                if commandCard.playerInteraction > 0:
+                    self.getMoneyFromPlayers(commandCard.moneyTransaction)
+
+                else:
+                    self.gamePlayers[self.currentPlayer].money += commandCard.moneyTransaction
+
+
+            # Otherwise check whether he is to pay money
+            if commandCard.collect == 0:
+
+                # Calculate the total amount that his has to pay
+                 moneyToPay = commandCard.moneyTransaction + commandCard.houseMultFactor * self.gamePlayers[self.currentPlayer].getTotalHouses() + commandCard.hotelMultFactor * self.gamePlayers[self.currentPlayer].getTotalHotels();
+
+                # Check wheter the player has the money to pay for his fine
+                # If not then he has to declare bankruptchy and exit the game
+                if self.methods.mActions.payMoney(self.currentPlayer, -1, moneyToPay) < 0:
+                    # Remove him for the game
+                    self.removePlayer(self.currentPlayer)
+                    for i in range(self.gameCards):
+
+                        if self.gamePlayers[self.currentPlayer].propertiesPurchased[i] == 1:
+
+                            self.biddingWar(self.gameCards[i].getPosition());
+
+    # Get money from every player other than the current and add them to his balance
+
+    def getMoneyFromPlayers(self, p):
+
+        for i in range(self.gamePlayers):
+
+            if (i !=self.currentPlayer) and (self.gamePlayers[i].isAlive()):
+
+                if self.methods.mActions.payMoney(i, self.currentPlayer, p) < 0:
+
+                    # If the player can't pay then remove him from the game
+                    self.removePlayer(i);
+                    self.gamePlayers[self.currentPlayer].money += self.gamePlayers[i].money;
+
+                    for j in range(self.gamecards):
+                        if self.gamePlayers[i].propertiesPurchased[j] == 1:
+
+                            self.gamePlayers[self.currentPlayer].propertiesPurchased[j] = 1
+                            self.properties[self.gameCards[j].getPosition()] = self.currentPlayer
+                            if self.gamePlayers[i].mortgagedProperties[j] == 1:
+                                self.gamePlayers[self.currentPlayer].mortgagedProperties[j] = 1
+                                self.methods.mActions.checkIfCompleted(self.currentPlayer, self.gameCards[j].getPosition())
+
+    # find nearest position that belongs to a specific group
+    def findNearestFromGroup(self,p):
+        moveTo = 0
+        minDist = 100
+
+        # Find the nearest utility to him amd move him there
+        tmp = self.gameCardsGroup[p].split(',')
+        for i in range(len(tmp)):
+            if math.fabs(self.currentPosition - int(tmp[i])) < minDist:
+                minDist = math.fabs(self.currentPosition - int(tmp[i]))
+                moveTo = int(tmp[i])
+
+        return moveTo
+
+    # Act accordingly when a player lands on a special posotion on board
+    def onSpecialPosition(self):
+
+        # Special Position: {0, 4, 10, 20, 30, 38};
+
+        # go
+        if self.currentPosition == 0:
+            pass
+
+        # Income tax
+        elif self.currentPosition == 4:
+            # Pay either 10 % of income or 200 - whichever is lower
+
+            minAmount = int(self.gamePlayers[self.currentPlayer].money * 0.1)
+            if minAmount > 200:
+                minAmount = 200
+
+            if self.methods.mActions.payMoney(self.currentPlayer, -1, minAmount) < 0:
+
+                # Remove him from the game
+                self.removePlayer(self.currentPlayer)
+                for i in range(self.gameCards):
+
+                    if self.gamePlayers[self.currentPlayer].propertiesPurchased[i] == 1:
+
+                        self.biddingWar(self.gameCards[i].getPosition())
+
+        # Jail ( just visiting )
+        elif self.currentPosition == 10:
+            pass
+
+        # FreeParking
+        elif self.currentPosition == 20:
+            pass
+
+        # Jail Position
+        elif self.currentPosition == 30:
+
+            # Send him to jail
+            self.gamePlayers[self.currentPlayer].position = 10
+            self.gamePlayers[self.currentPlayer].inJail = True
+            self.currentPosition = 10
+
+
+        # Luxury tax
+        else:
+
+            if self.methods.mActions.payMoney(self.currentPlayer, -1, 75) < 0:
+
+                # Remove him from game
+                self.removePlayer(self.currentPlayer);
+                for i in range(self.gameCards):
+
+                    if self.gamePlayers[self.currentPlayer].propertiesPurchased[i] == 1:
+
+                        self.biddingWar(self.gameCards[i].getPosition())
+
+    # If the player is in jail then try to get out
+    def inJailPosition(self):
+
+        System.Threading.Thread.Sleep(5);
+        rnd = random.randint(1,100)
+
+        dice1 = rnd.Next(1, 10000) % 6 + 1;
+        dice2 = rnd.Next(1, 10000) % 6 + 1;
+
+        # Get gim out of jail
+        if dice1 == dice2:
+
+            self.doublesInRow = 0;
+            self.getOutOfJailTries[self.currentPlayer] = 0;
+            self.gamePlayers[self.currentPlayer].inJail = False;
+
+        else:
+
+            self.getOutOfJailTries[self.currentPlayer]=self.getOutOfJailTries[self.currentPlayer]+1
+            if self.getOutOfJailTries[self.currentPlayer] < 3:
+                self.env_selectNextAgent()
+
+
+        # If maximum tries have been reached then pay the fine and get out normally
+        if self.getOutOfJailTries[self.currentPlayer]==3:
+
+            if (methods.mActions.payMoney(currentPlayer, -1, 50) > 0)
+
+                self.doublesInRow = 0;
+                self.getOutOfJailTries[self.currentPlayer] = 0
+                self.gamePlayers[self.currentPlayer].inJail = False
+
+            # Else remove him from game
+            else:
+
+                self.removePlayer(self.currentPlayer)
+                for i in range(self.gameCards):
+
+                    if self.gamePlayers[self.currentPlayer].propertiesPurchased[i]==1:
+
+                        self.biddingWar(self.gameCards[i].getPosition())
+
+
+                self.env_selectNextAgent()
+
+        # If he isn't in jail then act as if it is a normal turn
+        if !self.gamePlayers[self.currentPlayer].inJail:
+            self.playGame()
+
+
+    # Remove a player from the game
+    def removePlayer(self,id):
+
+        self.gamePlayers[id].agent_end(self.DEFEATREWARD)
+        # Return hotels and houses to the bank
+        self.currentHotels -= self.gamePlayers[id].getTotalHotels()
+        self.currentHouses -= self.gamePlayers[id].getTotalHouses()
+
+        for i in range(0,40):
+            if self.properties[i]==id:
+                self.properties[i] = -1
+                self.buildings[i] = 0
+
+
+        for i in range(len(self.completedGroups)):
+
+            if self.completedGroups[i]==id:
+                self.completedGroups[i] = -1
+
+
+        # Have to attach player's neural net also
+        self.getOutOfJailTries[id] = 0
+        self.averageMoney[id] += self.gamePlayers[id].money
+
+    # Initialize environment's parameters
+    def env_init(self):
+
+        # Create new list of agents
+        self.gamePlayers = []
+        self.currentPlayers = 3
+
+        # Average money of every player during the game
+        averageMoney = []
+
+        # Initialize agents.We 'll use the same for all games during this run
+        for i in range(self.currentPlayers):
+
+            self.gamePlayers.Add(RLAgent())
+            System.Threading.Thread.Sleep(100);
+
+            self.gamePlayers[i].agent_init('q', False, "Agent" + i.to_string(), (23));
+            #agent type(random-qlearning, policyFrozen, name, input vector length
+
+            averageMoney[i] = 0;
+
+
+        # Initialize stopwatch
+        timer = Stopwatch();
+
+        # Set total games
+        self.totalGames = 1001;
+
+        # Start the games
+        for self.currentGame in range(self.totalGames):
+            System.Threading.Thread.Sleep(100);
+
+            Awriter.WriteLine("---------------------------------");
+
+            # Reset and start the timer
+            timer.Reset()
+            timer.Start()
+
+            # Initialize stepCounter variable to prevent it from going on forever and determine manually the winner
+            self.stepCounter = 0
+
+            # Start and play the game
+            self.env_start()
+
+            if ((self.currentGame % 5)==0) and (self.gamePlayers[0].getType() != 'r'):
+                self.gamePlayers[0].saveOnFile("agents/nn" + self.currentGame.to_string() + "games.dat")
+
+
+        # Print experiment's info
+        self.printInfo()
+
+        # Close the writer
+        self.textWriter.Close()
+
+        # Cleanup agents
+        self.env_cleanup()
+
+        Awriter.Close()
+
+    # Start playing the game
+    def env_start(self):
+
+        System.Threading.Thread.Sleep(100);
+
+    # Start new game
+    self.initGameParameters()
+
+    # First player to play
+
+    firstPlayer = random.randint(0,self.currentPlayers)
+
+    # Play the first move of every agent
+    for self.currentPlayer in range(self.currentPlayers):
+
+        self.playFirstMoves((firstPlayer + self.currentPlayer) % self.currentPlayers)
+
+    # Set the current player
+    self.currentPlayer = firstPlayer
+
+    # Start playing the game until it's finished
+    while (!self.env_gameIsOver()):
+
+        self.playGame()
+
+
+    # End of game
+    self.env_end()
+
+
+
+    # Occurs when a game is finished
+    def env_end(self):
+        # Add moves
+        self.moves.Add(self.stepCounter)
+
+        # Stop the timer
+        self.timer.Stop();
+
+        self.tmp = self.timer.ElapsedMilliseconds
+        self.times.Add(self.tmp)
+        found = False;
+
+        # Find the last alive agent and send his reward signal
+        for i in range(self.gamePlayers):
+
+            if self.gamePlayers[i].isAlive():
+                found = True
+                self.winners.Add(i)
+                self.averageMoney[i] += self.gamePlayers[i].money
+                self.gamePlayers[i].agent_end(self.WINREWARD)
+                break
+
+        if not found:
+            self.winners.Add(-1)
+
+
+    # Select next agent
+    def env_selectNextAgent(self):
+
+
+        # Check whether the maximum allowed number of steps has occurred
+        # If so then end the game
+        if self.stepCounter >= self.MAXSTEPS:
+
+            # Declare all players as losers
+            for i in range(self.gamePlayers):
+                if self.gamePlayers[i].isAlive():
+
+                    self.removePlayer(i)
+
+
+            return
+
+
+        # For some reason it's freaking freezing...
+        System.Threading.Thread.Sleep(15);
+
+        # Since it's a new player he definately hasn't rolled any doubles yet
+        self.doublesInRow = 0
+
+        playersChecked = 0
+
+        # Find the id of the next alive agent
+        while not self.gamePlayers[self.currentPlayer].isAlive() and self.playersChecked <= self.currentPlayers:
+
+            self.currentPlayer = self.currentPlayer+1
+            self.currentPlayer = self.currentPlayer % self.currentPlayers
+            playersChecked = playersChecked + 1
+
+
+        # Increase his move counter since he's been selected
+        self.playerMoves[self.currentPlayer]  = self.playerMoves[self.currentPlayer] + 1
+
+        self.stepCounter = self.stepCounter + 1
+
+
+    # Specify whether the game is over
+    def env_gameIsOver(self):
+
+        # Count how many players are still alive in the game
+
+        counter = 0
+        for i in range(self.gamePlayers):
+
+            if self.gamePlayers[i].isAlive():
+            counter = counter + 1
+
+
+            # If there are more than one player then the game isn't over yet
+            if counter > 1:
+                return False
+            else:
+                return True
+
+
+    # Clean up memory when the experiment is completed
+    def env_cleanup(self):
+
+        # Print average money of every player
+            TextWriter
+            averageMoneyWriter = new
+            StreamWriter("txt/AverageMoney.txt");
+
+            for i in range(self.currentPlayers):
+                averageMoneyWriter.WriteLine((self.averageMoney[i] / self.totalGames).ToString())
+
+            averageMoneyWriter.Close()
+
+            # Dispose agent and save neural networks
+
+            for i in range(self.currentPlayers):
+
+                self.gamePlayers[i].saveOnFile("agents/nnFinalNeural--" + i.ToString() + ".dat")
+                self.gamePlayers[i].agent_cleanup()
+
+
+            MessageBox.Show("Experiment finished")
+    # Initiliaze game parameters
+    def initGameParameters(self):
+
+        self.chanceCards = []
+        self.communityChestCards = []
+
+        self.gameCards = []
+        self.gameCommandCards = []
+
+        self.currentHotels = 0
+        self.currentHouses = 0
+
+        self.currentPosition = 0
+        self.currentPlayer = 0
+
+        self.doublesInRow = 0
+
+        board = Board()
+
+        # Both CommandCards and PropertyCards implement the Card interface
+        # Set Command Cards(both Community Chest and Chance cards )
+        self.initMethods.setCommandsCards()
+
+        // Set Property Cards
+        self.initMethods.setPropertyCards()
+
+        // Create information for every position on board
+        self.initMethods.setBoard()
+
+        self.getOutOfJailTries = []
+        self.playerMoves = []
+
+        # Initialize arrays
+        for i in range(len(self.properties)):
+            self.properties[i] = -1
+            self.buildings[i] = 0
+
+            # Initialize array
+            for i in range(len(self.gameCardsGroup)):
+                self.completedGroups[i] = -1
+
+                for i in range(self.gamePlayers):
+                self.getOutOfJailTries[i] = 0
+                self.playerMoves[i] = 1
+
+
+    # Play first move of the game
+    def playFirstMoves(self,i):
+        # move the current player
+            self.movePlayer(i)
+            group = -1
+
+            if self.board.typeId[currentPosition] == 0:
+                            group = self.getCardFromPosition(currentPosition).getGroup()
+
+        #Create an instance of the observation class
+
+        obs = createObservation()
+
+        # Integer array to specify the actions
+
+        action = 0
+        # Pause thread
+        System.Threading.Thread.Sleep(15);
+
+        # If the current player is agent then sent him a message
+        action = self.gamePlayers[self.currentPlayer].agent_start(obs)
+
+        actions = {action, group}
+
+        if group >= 0:
+            self.methods.receiveAction(actions)
+
+        self.gamePlayers[self.currentPlayer].position = self.currentPosition
+
+
+    # Play the game
+    def playGame(self):
+
+        # Check whether the player is alive
+        if self.gamePlayers[self.currentPlayer].isAlive:
+
+            self.currentPosition = self.gamePlayers[self.currentPlayer].position
+
+            # Move player only if not in prison
+            if self.gamePlayers[self.currentPlayer].inJail:
+                self.inJailPosition()
+            else:
+
+                self.movePlayer(self.currentPlayer)
+
+                # If he throws 3 times doubles in a row then send him to jail
+                if self.doublesInRow == 3:
+
+                    # Send him to jail
+                    self.gamePlayers[self.currentPlayer].position = 10
+                    self.gamePlayers[self.currentPlayer].inJail = True
+                    self.currentPosition = 10
+                    self.doublesInRow = 0
+
+                    # if he goes to jail then select the next agent
+                    self.env_selectNextAgent()
+
+                else:
+                    self.moved = True;
+
+                    # While the player hasn't moved from a command card and his is still alive ( in case he has paid something)
+                    while (self.moved and self.gamePlayers[self.currentPlayer].isAlive) and (not self.gamePlayers[self.currentPlayer].inJail):
+
+                        # Check where he landed
+                        self.onPositionChanged()
+
+                        self.moved = False
+
+                        # Check whether he is in a special position or command card
+                        if self.currentPosition in self.specialPositions:
+                            self.onSpecialPosition()
+                        elif (self.currentPosition in self.chanceCardsPositions) or (self.currentPosition in self.communityChestCardsPositions):
+                            self.onCommandCard()
+
+
+                    # If the player is still alive then procceed with the action selected
+                    if (self.gamePlayers[self.currentPlayer].isAlive) and (not self.gamePlayers[self.currentPlayer].inJail):
+
+                        tempPosition = self.currentPosition
+                        while self.board.typeId[tempPosition] !=0 :
+                            tempPosition = tempPosition + 1
+
+                    group = self.getCardFromPosition(tempPosition).getGroup()
+
+                    # List of actions
+                    getList = []
+                    spendList = []
+
+                    for currentGroup in range(len(self.gameCardsGroup)):
+
+                        group = self.getCardFromPosition(tempPosition).getGroup()
+                        group = (group + currentGroup) % len(self.gameCardsGroup)
+
+                    # check whether a player can act on a specific group
+                    ableToAct = False
+                    for i in range(len(self.gameCardsGroup.split(','))):
+                        if self.properties[int(self.gameCardsGroup[group].split(',')[i])] == self.currentPlayer:
+                            ableToAct = True
+
+                        if int(self.gameCardsGroup[group].split(',')[i]) == self.currentPosition:
+
+                            if (self.properties[self.currentPosition] == self.currentPlayer) or (self.properties[self.currentPosition] == -1):
+                                ableToAct = True
+
+                    # endregion CheckAbilityToAct
+
+                    if ableToAct:
+
+                        # Integer to specify the action
+                        action = 0;
+
+                        # Pause thread
+                        System.Threading.Thread.Sleep(20);
+
+                        # Create an instance of the observation class
+
+                        obs = self.createObservation()
+
+                        # region ChangeCurrentObservation
+                        obs.position.relativePlayersArea = float((group + 1) / 10)
+
+                        # endregion ChangeCurrentObservation
+
+                        action = self.gamePlayers[self.currentPlayer].agent_step(obs, self.calculateReward(self.currentPlayer))
+
+                        if self.currentPlayer == 0:
+                            Awriter.WriteLine(action.ToString() + " -- " + group.ToString());
+
+                            if action == 0:
+                                set = {action, group}
+                            if action > 0:
+                                spendList.Add(set)
+                            else:
+                                getList.Add(set)
+
+                        for i in range(getList):
+
+                            System.Threading.Thread.Sleep(5)
+                            self.methods.receiveAction(getList[i])
+
+                        for i in range(spendList):
+                            System.Threading.Thread.Sleep(5)
+                            self.methods.receiveAction(spendList[i])
+
+
+                        # If current property isn't owned yet start the bidding game
+                        if (self.properties[self.currentPosition] == -1) and (self.board.typeId[self.currentPosition]==0):
+
+                            self.biddingWar(self.currentPosition)
+
+
+                            # If he hasn't thrown doubles then select the next agent
+                            if self.doublesInRow == 0:
+                                self.env_selectNextAgent()
+
+
+                        # If he is either dead or in jail select next agent
+                        else:
+
+                            self.env_selectNextAgent()
+
+                    # If he isn't alive then select the next alive agent
+                    else:
+                        self.env_selectNextAgent()
+
+
+
+    # Start the bidding
+    def biddingWar(self,currentPosition):
+
+        if (self.properties[self.currentPosition] == -1) and (self.board.typeId[self.currentPosition] == 0):
+
+            # Find the group of the current card
+            group = self.getCardFromPosition(self.currentPosition).getGroup()
+
+            # Start the bidding war until some player has outbid everyone else
+
+            higherBidder = -1
+            totalBidders = 0
+            multFactor = 0.4
+            finished = False
+            maxBid = 0
+
+        while not finished:
+
+            bid = int(multFactor * self.getCardFromPosition(self.currentPosition).getValue())
+
+            for i in range(self.currentPlayers):
+                if self.gamePlayers[i].isAlive:
+                    # Pause thread
+                    System.Threading.Thread.Sleep(20)
+
+                    specObs = self.createObservation()
+
+                    # region RelativeAssets
+
+                    total = 0
+
+                    for j in range(self.gamePlayers):
+
+                        total += self.methods.mActions.caclulateAllAssets(j)
+
+
+                    total += (getCardFromPosition(currentPosition).getMortgageValue() - bid);
+
+                    double assets = (double)(((methods.mActions.caclulateAllAssets(i) + (getCardFromPosition(currentPosition).getMortgageValue() - bid))));
+
+                    // Current player's money / Total money
+                    specObs.finance.relativeAssets = assets / total;
+
+
+                    // Current player's money / Total money
+                    specObs.finance.relativePlayersMoney = smoothFunction(gamePlayers[i].money - bid, 1500);
+
+                    // Relative players position
+                    specObs.position.relativePlayersArea = (double)((double)(group + 1) / 10);
+
+                    specObs.area.gameGroupInfo[group, 0] += (gameCardsGroup[group].Split(',').Length / 12) / 17;
+
+
+                    int action = gamePlayers[i].agent_step(specObs, calculateReward(i));
+
+                    if (i.Equals(0))
+                    Awriter.WriteLine("BiddingTime " + action.ToString() + " -- " + group.ToString());
+
+                    if (action > 0) and (self.gamePlayers[i].money >= bid):
+
+                        higherBidder = i
+                        totalBidders = totalBidders + 1
+                        maxBid = bid
+
+
+            if totalBidders > 1:
+                finished = False
+                higherBidder = -1
+                multFactor += 0.2
+                totalBidders = 0
+
+            elif totalBidders == 0:
+
+                higherBidder = -1
+                finished = True
+
+            else:
+                finished = True
+
+
+        # If someone is chosen as a higher bidder then make him buy the current property
+        if higherBidder != -1:
+
+            self.properties[self.currentPosition] = higherBidder
+            self.gamePlayers[higherBidder].propertiesPurchased[self.getIndexFromPosition(self.currentPosition)] = 1
+            self.gamePlayers[higherBidder].money -= maxBid
+            self.methods.mActions.checkIfCompleted(higherBidder, self.currentPosition)
+
+
+        # Print experiment's info
+        def printInfo(self):
+            # Check whether the directory exists or not
+            if (!Directory.Exists("txt/"))
+                Directory.CreateDirectory("txt/");
+
+            # Create streamwriter for the output file
+            textWriter = new StreamWriter("txt/output.txt");
+            TextWriter winner = new StreamWriter("txt/winners.txt");
+            TextWriter move = new StreamWriter("txt/moves.txt");
+
+            textWriter.WriteLine("=========== RL AGENTS =============");
+            textWriter.WriteLine("Game----Time-----Winnner-----Moves-");
+            for (int i = 0; i < winners.Count; i++)
+            {
+                textWriter.WriteLine(
+                (i + 1).ToString() + "        " + (times[i] / 1000).ToString() + "        " + winners[
+                    i] + "     " + moves[i].ToString());
+                winner.WriteLine(winners[i].ToString());
+                move.WriteLine(moves[i].ToString());
+            }
+
+            move.Close();
+            winner.Close();
+
+            }
+
+            # endregion Environment
+
+            # endregion RLMethods
+
+            }
+
+
+
+
+
 
 
 

@@ -2,6 +2,7 @@ import os
 import xml.etree.ElementTree as ET
 from Classes.card import Card
 from Classes.specialPositonCard import SpecialPositionCard
+from Classes.commandCard import CommandCard
 from Classes.propertyCard import PropertyCard
 from RLHandlers.rlEnvironment import  RLEnvironment
 
@@ -10,23 +11,27 @@ class InitMethods(object):
 
     # ######### Region SetMethods #########
 
+    def __init__(self):
+        self.rlEnvironment = RLEnvironment()
+        self.file_name_command = 'Data/CommandCards.xml'
+        self.file_name_property = 'Data/Properties.xml'
+
     def setCommandCards(self):
 
         try:
             # XML reader to store the commandCards
-            if os.path.isfile(self.file_name):
+            if os.path.isfile(self.file_name_command):
 
-                tree = ET.parse(self.file_name)
+                tree = ET.parse(self.file_name_command)
                 root_node = tree.getroot()
 
                 for node in root_node:
-                    p_card = PropertyCard(node.find('Name').text, node.find('Position').text, node.find('Price').text,
-                                          'nns', node.find('Mortgage').text, node.find('HouseCost').text,
-                                          node.find('HotelCost').text, node.find('Group').text)
-                    self.p_cards.append(p_card)
+                    p_card = CommandCard(node.find('TypeOfCard').text, node.find('Text').text, node.find('FixedMove').text,
+                                          node.find('Collect').text, node.find('MoneyTransaction').text, node.find('PlayersInteraction').text,
+                                          node.find('HouseMultFactor').text, node.find('HotelMultFactor').text)
+                    self.rlEnvironment.addCommandCard(p_card)
+                    self.rlEnvironment.setCommandCards()
 
-                for p_card in self.p_cards:
-                    print(p_card.card_name)
         except Exception as e:
             print('Exception encountered: ', str(e))
             return False
@@ -35,8 +40,28 @@ class InitMethods(object):
 
     def setPropertyCards(self):
         try:
-            # Create XML reader to store the propertyCards
-            pass
+            # XML reader to store the commandCards
+            if os.path.isfile(self.file_name_command):
+
+                tree = ET.parse(self.file_name_command)
+                root_node = tree.getroot()
+
+                for node in root_node:
+                    rent = []
+                    rentString = node.find('Rent').text.split(',')
+                    for s in rentString:
+                        rent.append(int(s));
+
+                    p_card = PropertyCard(node.find('Name').text, node.find('Position').text,
+                                          node.find('Price').text,
+                                          rent,
+                                          node.find('Mortage').text,
+                                          node.find('HouseCost').text,
+                                          node.find('HotelCost').text, node.find('Group').text)
+
+                    self.rlEnvironment.addPropertyCard(p_card)
+                    self.rlEnvironment.setPropertyCards()
+
         except Exception as e:
             print('Exception encountered: ', str(e))
             return False
@@ -44,6 +69,13 @@ class InitMethods(object):
         return True
 
     def setBoard(self):
+
+        Card = []
+        t = []
+
+        for i in range(40):
+            t.append(-1)
+
         # Add PropertyCards
         # Add CommunityChestCards
         # Add ChanceCards
