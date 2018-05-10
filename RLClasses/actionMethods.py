@@ -1,13 +1,11 @@
 from MonopolyHandlers.monopolyActions import MonopolyActions
-from HelperUtils.applicaiton_context import ApplicationContext
+
 
 
 class ActionMethods(object):
-    mActions = MonopolyActions()
-    rl_env_obj = None
 
     def __init__(self, rl_env_obj):
-        self.mActions = MonopolyActions()
+        self.mActions = MonopolyActions(rl_env_obj)
         self.rl_env_obj = rl_env_obj
 
 

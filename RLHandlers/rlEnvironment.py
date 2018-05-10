@@ -26,7 +26,8 @@ class RLEnvironment(object):
     rlEnv = None
 
     def __init__(self):
-        pass
+        self.methods = ActionMethods(self.get_instance())
+
 
     def get_instance(self):
 
@@ -68,7 +69,7 @@ class RLEnvironment(object):
     totalGames = 0
 
     # Action methods
-    methods = ActionMethods(object)
+    # methods = ActionMethods()
 
     # Current player and current position value
     currentPlayer = 0
@@ -835,7 +836,7 @@ class RLEnvironment(object):
 
             self.gamePlayers.append(RLAgent())
             # System.Threading.Thread.Sleep(100)
-            time.sleep(100)
+            #time.sleep(100)
 
             self.gamePlayers[i].agent_init('q', False, "Agent" + str(i), (23))
             #agent type(random-qlearning, policyFrozen, name, input vector length
@@ -852,7 +853,7 @@ class RLEnvironment(object):
         # Start the games
         for self.currentGame in range(self.totalGames):
             # System.Threading.Thread.Sleep(100)
-            time.sleep(100)
+            #time.sleep(100)
 
             self.Awriter.write("---------------------------------"+"\n")
 
@@ -885,7 +886,7 @@ class RLEnvironment(object):
     def env_start(self):
 
         # System.Threading.Thread.Sleep(100)
-        time.sleep(100)
+        #time.sleep(100)
 
         # Start new game
         self.initGameParameters()
@@ -1331,9 +1332,9 @@ class RLEnvironment(object):
 
         try:
             # XML reader to store the commandCards
-            if os.path.isfile(self.file_name_command):
+            if os.path.isfile('Data/CommandCards.xml'):
 
-                tree = ET.parse(self.file_name_command)
+                tree = ET.parse('Data/CommandCards.xml')
                 root_node = tree.getroot()
 
                 for node in root_node:
@@ -1354,9 +1355,9 @@ class RLEnvironment(object):
     def initialisePropertyCards(self):
         try:
             # XML reader to store the commandCards
-            if os.path.isfile(self.file_name_command):
+            if os.path.isfile('Data/CommandCards.xml'):
 
-                tree = ET.parse(self.file_name_command)
+                tree = ET.parse('Data/CommandCards.xml')
                 root_node = tree.getroot()
 
                 for node in root_node:
@@ -1432,12 +1433,12 @@ class RLEnvironment(object):
         for i in range(len(self.winners)):
 
             textWriter.write(
-            (i + 1).ToString() + "        " + (self.times[i] / 1000).ToString() + "        " + self.winners[
-                i] + "        " + self.moves[i].ToString())
-            winner.write(self.winners[i].ToString())
-            move.write(self.moves[i].ToString())
+            str(i + 1) + "        " + str(self.times[i] / 1000)+ "        " + self.winners[
+                i] + "        " + str(self.moves[i]))
+            winner.write(str(self.winners[i]))
+            move.write(str(self.moves[i]))
 
-        winner.Close()
+        winner.close()
 
 
 if __name__ == "__main__":

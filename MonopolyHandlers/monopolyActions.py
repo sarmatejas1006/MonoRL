@@ -255,7 +255,7 @@ class MonopolyActions(object):
             return False
 
     # Calculate value of all the player's assets
-    def calculateAllAssets(self, player):
+    def caclulateAllAssets(self, player):
         total = 0.0
 
         # Start by adding the player's cash to the total amount
