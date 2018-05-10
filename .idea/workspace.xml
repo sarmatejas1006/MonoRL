@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b4c928ca-32d3-4d49-a226-2b970335e580" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/MonopolyHandlers/actions.txt" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/RLHandlers/rlAgent.py" afterPath="$PROJECT_DIR$/RLHandlers/rlAgent.py" />
-      <change beforePath="$PROJECT_DIR$/RLHandlers/rlEnvironment.py" afterPath="$PROJECT_DIR$/RLHandlers/rlEnvironment.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -420,7 +419,14 @@
       <option name="project" value="LOCAL" />
       <updated>1525956098374</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Added text files">
+      <created>1525987022746</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1525987022746</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -459,7 +465,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="monopolyActions complete" />
     <MESSAGE value="rlAgent complete" />
-    <option name="LAST_COMMIT_MESSAGE" value="rlAgent complete" />
+    <MESSAGE value="Added text files" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added text files" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
