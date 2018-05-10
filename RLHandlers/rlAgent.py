@@ -4,6 +4,8 @@ from RLClasses.obsArea import ObsArea
 from random import random, randint
 from RLClasses.eligibilityTrace import EligibilityTrace
 from RLClasses.action import Action
+import sys
+# del sys.modules['sklearn.__check_build']
 from sklearn.neural_network import MLPClassifier
 
 

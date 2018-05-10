@@ -110,7 +110,7 @@ class RLEnvironment(object):
     gameCardsGroup = ["12,28", "5,15,25,35", "1,3", "6,8,9", "11,13,14", "16,18,19", "21,23,24", "26,27,29", "31,32,34", "37,39"]
 
     # List of Game Players
-    gamePlayers = [Player()]
+    gamePlayers = []
 
     # List of CommandCards (both Community Chest and Chance cards)
     gameCommandCards = [CommandCard]
@@ -226,7 +226,7 @@ class RLEnvironment(object):
 
     def createEnvInfo(self, pCard):
         # TODO
-        pass
+        return "info"
 
     # Create an instance of Observation to represent the current state of the environment
     def createObservation(self):
@@ -438,7 +438,7 @@ class RLEnvironment(object):
     # Load an already created agent
     def NetworkloadNeural(self, path):
         # todo
-        # return networl
+        # return network
         pass
         return
 
@@ -890,7 +890,7 @@ class RLEnvironment(object):
     def env_start(self):
 
         # System.Threading.Thread.Sleep(100)
-        time.sleep(100)
+        # time.sleep(100)
 
         # Start new game
         self.initGameParameters()
@@ -1432,8 +1432,7 @@ class RLEnvironment(object):
         winner = open("txt/winners.txt")
         move = open("txt/moves.txt")
 
-        textWriter.write("=========== RL AGENTS =============")
-        textWriter.write("Game----Time-----Winnner-----Moves-")
+        textWriter.write("=========== MONORL TEST RUN =============")
         for i in range(len(self.winners)):
 
             textWriter.write(
@@ -1441,6 +1440,8 @@ class RLEnvironment(object):
                 i] + "        " + str(self.moves[i]))
             winner.write(str(self.winners[i]))
             move.write(str(self.moves[i]))
+
+            textWriter.write("Game:", i + 1, "Winner:", str(self.winners[i]), "Moves:", str(self.moves[i]))
 
         winner.close()
 
