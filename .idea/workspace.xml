@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b4c928ca-32d3-4d49-a226-2b970335e580" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/MonopolyHandlers/monopolyActions.py" afterPath="$PROJECT_DIR$/MonopolyHandlers/monopolyActions.py" />
-      <change beforePath="$PROJECT_DIR$/RLClasses/actionMethods.py" afterPath="$PROJECT_DIR$/RLClasses/actionMethods.py" />
+      <change beforePath="$PROJECT_DIR$/RLHandlers/rlAgent.py" afterPath="$PROJECT_DIR$/RLHandlers/rlAgent.py" />
       <change beforePath="$PROJECT_DIR$/RLHandlers/rlEnvironment.py" afterPath="$PROJECT_DIR$/RLHandlers/rlEnvironment.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -27,11 +26,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="commandCard.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Classes/commandCard.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="301">
+              <caret line="24" column="0" lean-forward="false" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="actionMethods.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/RLClasses/actionMethods.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+            <state relative-caret-position="104">
+              <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -40,8 +49,18 @@
       <file leaf-file-name="monopolyActions.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MonopolyHandlers/monopolyActions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="30" lean-forward="true" selection-start-line="0" selection-start-column="30" selection-end-line="0" selection-end-column="30" />
+            <state relative-caret-position="87">
+              <caret line="258" column="19" lean-forward="true" selection-start-line="258" selection-start-column="19" selection-end-line="258" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="rlAgent.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/RLHandlers/rlAgent.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="405">
+              <caret line="33" column="16" lean-forward="false" selection-start-line="33" selection-start-column="8" selection-end-line="33" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -50,8 +69,28 @@
       <file leaf-file-name="rlEnvironment.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/RLHandlers/rlEnvironment.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="31" column="27" lean-forward="true" selection-start-line="31" selection-start-column="27" selection-end-line="31" selection-end-column="27" />
+            <state relative-caret-position="224">
+              <caret line="1146" column="48" lean-forward="true" selection-start-line="1146" selection-start-column="48" selection-end-line="1146" selection-end-column="48" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="codecs.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/codecs.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="125">
+              <caret line="319" column="0" lean-forward="false" selection-start-line="319" selection-start-column="0" selection-end-line="319" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="propertyCard.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Classes/propertyCard.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -60,8 +99,8 @@
       <file leaf-file-name="initMethods.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MonopolyHandlers/initMethods.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="18" column="50" lean-forward="false" selection-start-line="18" selection-start-column="40" selection-end-line="18" selection-end-column="50" />
+            <state relative-caret-position="110">
+              <caret line="17" column="34" lean-forward="true" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -75,8 +114,17 @@
     <findStrings>
       <find>caclulateAllAssets</find>
       <find>file_name</find>
+      <find>gameCards</find>
+      <find>initia</find>
+      <find>addCard</find>
+      <find>addcard</find>
+      <find>b[</find>
+      <find>gamePlayers</find>
+      <find>init(</find>
       <find>sleep</find>
+      <find>Exception encountered</find>
       <find>calculateAllAssets</find>
+      <find>playGame</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -95,6 +143,7 @@
         <option value="$PROJECT_DIR$/HelperUtils/applicaiton_context.py" />
         <option value="$PROJECT_DIR$/RLClasses/actionMethods.py" />
         <option value="$PROJECT_DIR$/MonopolyHandlers/monopolyActions.py" />
+        <option value="$PROJECT_DIR$/RLHandlers/rlAgent.py" />
         <option value="$PROJECT_DIR$/RLHandlers/rlEnvironment.py" />
       </list>
     </option>
@@ -306,7 +355,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.start_game">
+  <component name="RunManager" selected="Python.rlEnvironment">
     <configuration name="action" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -364,20 +413,19 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
-    <configuration name="initMethods" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="rlEnvironment" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/MonopolyHandlers" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/RLHandlers" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="MonoRL" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MonopolyHandlers/initMethods.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/RLHandlers/rlEnvironment.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -403,19 +451,19 @@
       <option name="MODULE_MODE" value="false" />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.initMethods" />
-      <item index="1" class="java.lang.String" itemvalue="Python.eligibilityTrace" />
-      <item index="2" class="java.lang.String" itemvalue="Python.applicaiton_context" />
-      <item index="3" class="java.lang.String" itemvalue="Python.action" />
-      <item index="4" class="java.lang.String" itemvalue="Python.start_game" />
+      <item index="0" class="java.lang.String" itemvalue="Python.eligibilityTrace" />
+      <item index="1" class="java.lang.String" itemvalue="Python.applicaiton_context" />
+      <item index="2" class="java.lang.String" itemvalue="Python.action" />
+      <item index="3" class="java.lang.String" itemvalue="Python.start_game" />
+      <item index="4" class="java.lang.String" itemvalue="Python.rlEnvironment" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.start_game" />
-        <item index="1" class="java.lang.String" itemvalue="Python.applicaiton_context" />
-        <item index="2" class="java.lang.String" itemvalue="Python.action" />
-        <item index="3" class="java.lang.String" itemvalue="Python.eligibilityTrace" />
-        <item index="4" class="java.lang.String" itemvalue="Python.initMethods" />
+        <item index="0" class="java.lang.String" itemvalue="Python.rlEnvironment" />
+        <item index="1" class="java.lang.String" itemvalue="Python.start_game" />
+        <item index="2" class="java.lang.String" itemvalue="Python.applicaiton_context" />
+        <item index="3" class="java.lang.String" itemvalue="Python.action" />
+        <item index="4" class="java.lang.String" itemvalue="Python.eligibilityTrace" />
       </list>
     </recent_temporary>
   </component>
@@ -454,7 +502,21 @@
       <option name="project" value="LOCAL" />
       <updated>1525952532584</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="monopolyActions completesdsfafs">
+      <created>1525955289970</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1525955289970</updated>
+    </task>
+    <task id="LOCAL-00005" summary="monopolyActions completessdfsdfadsfafs">
+      <created>1525956082223</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1525956082223</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -462,8 +524,8 @@
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23441616" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17304964" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17304964" sideWeight="0.50307286" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17304964" sideWeight="0.49692714" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -501,29 +563,48 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="monopolyActions complete" />
-    <option name="LAST_COMMIT_MESSAGE" value="monopolyActions complete" />
+    <MESSAGE value="monopolyActions completesdsfafs" />
+    <MESSAGE value="monopolyActions completessdfsdfadsfafs" />
+    <option name="LAST_COMMIT_MESSAGE" value="monopolyActions completessdfsdfadsfafs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/MonopolyHandlers/monopolyActions.py</url>
-          <line>3</line>
+          <line>261</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RLHandlers/rlEnvironment.py</url>
+          <line>844</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RLHandlers/rlEnvironment.py</url>
+          <line>1449</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/RLHandlers/rlEnvironment.py</url>
+          <line>1138</line>
+          <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="1" />
+      <option name="time" value="9" />
     </breakpoint-manager>
     <watches-manager />
   </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>len(self.rl_env_obj.gamePlayers[player].buildingsBuilt)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/MonopolyHandlers/start_game.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Classes/board.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -745,13 +826,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/RLHandlers/rlAgent.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5095">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -802,25 +876,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Classes/commandCard.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
-          <caret line="16" column="37" lean-forward="false" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Classes/player.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Classes/propertyCard.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-255">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -846,6 +906,64 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/MonopolyHandlers/initMethods.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="17" column="34" lean-forward="true" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Classes/commandCard.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="301">
+          <caret line="24" column="0" lean-forward="false" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Classes/propertyCard.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/codecs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="125">
+          <caret line="319" column="0" lean-forward="false" selection-start-line="319" selection-start-column="0" selection-end-line="319" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RLClasses/actionMethods.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="104">
+          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RLHandlers/rlAgent.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="33" column="16" lean-forward="false" selection-start-line="33" selection-start-column="8" selection-end-line="33" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MonopolyHandlers/monopolyActions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="87">
+          <caret line="258" column="19" lean-forward="true" selection-start-line="258" selection-start-column="19" selection-end-line="258" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/RLHandlers/actions.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -854,36 +972,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MonopolyHandlers/initMethods.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="18" column="50" lean-forward="false" selection-start-line="18" selection-start-column="40" selection-end-line="18" selection-end-column="50" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MonopolyHandlers/monopolyActions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="30" lean-forward="true" selection-start-line="0" selection-start-column="30" selection-end-line="0" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RLClasses/actionMethods.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/RLHandlers/rlEnvironment.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="31" column="27" lean-forward="true" selection-start-line="31" selection-start-column="27" selection-end-line="31" selection-end-column="27" />
+        <state relative-caret-position="224">
+          <caret line="1146" column="48" lean-forward="true" selection-start-line="1146" selection-start-column="48" selection-end-line="1146" selection-end-column="48" />
           <folding />
         </state>
       </provider>

@@ -31,6 +31,9 @@ class RLAgent(Player):
     # Agent's type - random, qlearning or sarsa
     agentType = ""
 
+    def __init__(self, rl_env_obj):
+        self.rl_env_obj = rl_env_obj
+
     # ######### Region RLMethods #########
 
     # Initialize agent's parameters
@@ -41,7 +44,7 @@ class RLAgent(Player):
 
         # ######### Region Initialize_parameters #########
         self.name = agentName
-        self.id = None  # TODO add ID
+        self.id = int(str(agentName[-1]))
         self.agentType = aType
         self.policyFrozen = policy
 
@@ -182,7 +185,7 @@ class RLAgent(Player):
 
     # Calculate payment for a specific property
     def getRentPayment(self, cp):
-        pass
+        return self.rl_env_obj.gameCards[cp].rent[self.buildingsBuilt[cp]]
 
     # Return a random action for the current state
     def randomAction(self):

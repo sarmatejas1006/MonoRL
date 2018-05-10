@@ -68,7 +68,7 @@ class RLEnvironment(object):
     totalGames = 0
 
     # Action methods
-    methods = ActionMethods(object)
+    #methods =  ActionMethods(object)
 
     # Current player and current position value
     currentPlayer = 0
@@ -216,11 +216,11 @@ class RLEnvironment(object):
             self.gameCommandCards.remove(pCard)
 
     # Method to add and delete a PropertyCard
-    def addCommandCard(self, pCard):
+    def addCard(self, pCard):
         if pCard not in self.gameCards:
             self.gameCards.append(pCard)
 
-    def deleteCommandCard(self, pCard):
+    def deleteCard(self, pCard):
         if pCard in self.gameCards:
             self.gameCards.remove(pCard)
 
@@ -827,15 +827,20 @@ class RLEnvironment(object):
         self.gamePlayers = []
         self.currentPlayers = 3
 
+        self.methods =  ActionMethods(self.get_instance())
+
         # Average money of every player during the game
         averageMoney = []
+
+        # Start and play the game
+        self.env_start()
 
         # Initialize agents.We 'll use the same for all games during this run
         for i in range(self.currentPlayers):
 
-            self.gamePlayers.append(RLAgent())
+            self.gamePlayers.append(RLAgent(self.get_instance()))
             # System.Threading.Thread.Sleep(100)
-            time.sleep(100)
+            time.sleep(10)
 
             self.gamePlayers[i].agent_init('q', False, "Agent" + str(i), (23))
             #agent type(random-qlearning, policyFrozen, name, input vector length
@@ -847,12 +852,12 @@ class RLEnvironment(object):
         timer = Stopwatch()
 
         # Set total games
-        self.totalGames = 1001
+        self.totalGames = 1
 
         # Start the games
         for self.currentGame in range(self.totalGames):
             # System.Threading.Thread.Sleep(100)
-            time.sleep(100)
+            #time.sleep(10)
 
             self.Awriter.write("---------------------------------"+"\n")
 
@@ -864,7 +869,7 @@ class RLEnvironment(object):
             self.stepCounter = 0
 
             # Start and play the game
-            self.env_start()
+            # self.env_start()
 
             if ((self.currentGame % 5)==0) and (self.gamePlayers[0].getType() != 'r'):
                 self.gamePlayers[0].saveOnFile("agents/nn" + self.currentGame.to_string() + "games.dat")
@@ -1014,7 +1019,7 @@ class RLEnvironment(object):
 
         for i in range(self.currentPlayers):
 
-            self.gamePlayers[i].saveOnFile("agents/nnFinalNeural--" + i.ToString() + ".dat")
+            self.gamePlayers[i].saveOnFile("agents/nnFinalNeural--" + str(i) + ".dat")
             self.gamePlayers[i].agent_cleanup()
 
         print('Experiment finished')
@@ -1331,9 +1336,9 @@ class RLEnvironment(object):
 
         try:
             # XML reader to store the commandCards
-            if os.path.isfile('Data/CommandCards.xml'):
+            if os.path.isfile('/Users/maitraikansal/PycharmProjects/MonoRl/Data/CommandCards.xml'):
 
-                tree = ET.parse('Data/CommandCards.xml')
+                tree = ET.parse('/Users/maitraikansal/PycharmProjects/MonoRl/Data/CommandCards.xml')
                 root_node = tree.getroot()
 
                 for node in root_node:
@@ -1354,9 +1359,9 @@ class RLEnvironment(object):
     def initialisePropertyCards(self):
         try:
             # XML reader to store the commandCards
-            if os.path.isfile('Data/CommandCards.xml'):
+            if os.path.isfile('/Users/maitraikansal/PycharmProjects/MonoRl/Data/Properties.xml'):
 
-                tree = ET.parse('Data/CommandCards.xml')
+                tree = ET.parse('/Users/maitraikansal/PycharmProjects/MonoRl/Data/Properties.xml')
                 root_node = tree.getroot()
 
                 for node in root_node:
@@ -1372,8 +1377,8 @@ class RLEnvironment(object):
                                           node.find('HouseCost').text,
                                           node.find('HotelCost').text, node.find('Group').text)
 
-                    self.addPropertyCard(p_card)
-                    self.setPropertyCards()
+                    self.addCard(p_card)
+                    #self.setCards()
 
         except Exception as e:
             print('Exception encountered: ', str(e))
@@ -1389,19 +1394,19 @@ class RLEnvironment(object):
         # Add PropertyCards
 
         for i in range(len(self.getCards())):
-           b[self.getCards()[i].getPosition()] = self.getCards()[i]
-           t[self.getCards()[i].getPosition()] = 0
+           b[int(self.getCards()[i].getPosition())] = self.getCards()[i]
+           t[int(self.getCards()[i].getPosition())] = 0
 
         # Add CommunityChestCards
 
         for i in range(len(self.getCommunityCardPositions())):
-            b[self.getCommunityCardPositions()[i]] = CommandCard()
-            t[self.getCommunityCardPositions()[i]] = 1
+            b[int(self.getCommunityCardPositions()[i])] = CommandCard()
+            t[int(self.getCommunityCardPositions()[i])] = 1
 
         # Add ChanceCards
         for i in range(len(self.getChanceCardPositions())):
-            b[self.getChanceCardPositions()[i]] = CommandCard()
-            t[self.getChanceCardPositions()[i]] = 2
+            b[int(self.getChanceCardPositions()[i])] = CommandCard()
+            t[int(self.getChanceCardPositions()[i])] = 2
 
 
 
