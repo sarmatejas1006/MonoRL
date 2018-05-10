@@ -1,21 +1,26 @@
 import sys
-sys.path.insert(0, "/Users/maitraikansal/PycharmProjects/MonoRL")
+sys.path.append("/Users/maitraikansal/PycharmProjects/MonoRL")
 from RLHandlers.rlEnvironment import RLEnvironment
-from MonopolyHandlers.initMethods import InitMethods
 
 
 class ApplicationContext(object):
 
+    rlEnv = RLEnvironment()
+
     def __init__(self):
-        self.rlEnv = RLEnvironment()
+        pass
 
     def get_instance(self):
+
+        if self.rlEnv is None:
+            self.rlEnv = RLEnvironment()
+
         return self.rlEnv
 
 
 if __name__ == '__main__':
     s1 = ApplicationContext().get_instance()
-    s2 = ApplicationContext.get_instance()
+    s2 = ApplicationContext().get_instance()
 
     if s1 == s2:
         print('singleton')
