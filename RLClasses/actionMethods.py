@@ -8,7 +8,6 @@ class ActionMethods(object):
         self.mActions = MonopolyActions(rl_env_obj)
         self.rl_env_obj = rl_env_obj
 
-
     # Receive observation and an action array
     def receiveAction(self, actions):
 
