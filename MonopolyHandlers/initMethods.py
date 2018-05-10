@@ -5,6 +5,7 @@ from Classes.specialPositonCard import SpecialPositionCard
 from Classes.commandCard import CommandCard
 from Classes.propertyCard import PropertyCard
 from RLHandlers.rlEnvironment import  RLEnvironment
+from Classes.board import Board
 
 
 class InitMethods(object):
@@ -70,15 +71,28 @@ class InitMethods(object):
 
     def setBoard(self):
 
-        Card = []
+        b = [] # Card[]
         t = []
 
         for i in range(40):
             t.append(-1)
 
         # Add PropertyCards
+
+        for i in range(len(self.rlEnvironment.getCards())):
+            b[self.rlEnvironment.getCards()[i].getPosition()] = self.rlEnvironment.getCards()[i]
+            t[self.rlEnvironment.getCards()[i].getPosition()] = 0
+
         # Add CommunityChestCards
+
+        for i in range(len(self.rlEnvironment.getCommunityCardPositions())):
+            b[self.rlEnvironment.getCommunityCardPositions()[i]] = CommandCard()
+            t[self.rlEnvironment.getCommunityCardPositions()[i]] = 1
+
         # Add ChanceCards
+        for i in range(len(self.rlEnvironment.getChanceCardPositions())):
+            b[self.rlEnvironment.getChanceCardPositions()[i]] = CommandCard()
+            t[self.rlEnvironment.getChanceCardPositions()[i]] = 2
 
         b = [Card() for i in range(40)]  # empty card array
         t = [-1] * 40  # int array of -1
@@ -91,5 +105,5 @@ class InitMethods(object):
                 b[i] = SpecialPositionCard()
 
         # Set the global board parameter
-
+                self.rlEnvironment.setBoard(Board(b, t))
         pass

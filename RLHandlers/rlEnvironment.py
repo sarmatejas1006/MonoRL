@@ -1,22 +1,22 @@
 from MonopolyHandlers.initMethods import InitMethods
 from RLClasses.actionMethods import ActionMethods
 from Classes.player import Player
+from Classes.board import Board
 from random import shuffle
-from Classes.propertyCard import PropertyCard
 from Classes.commandCard import CommandCard
 from RLClasses.observation import Observation
 from RLClasses.obsPosition import ObsPosition
 from RLClasses.obsArea import ObsArea
 from RLClasses.obsFinance import ObsFinance
 from RLHandlers.rlAgent import RLAgent
-import time
+import os
 import math
 import random
 
 
 class RLEnvironment:
 
-    Awriter = "actions.txt"
+    Awriter = open("actions.txt","w")
 
     # Handler for the helper methods of the project
     initMethods = InitMethods()
@@ -206,12 +206,13 @@ class RLEnvironment:
             self.gameCards.remove(pCard)
 
     def createEnvInfo(self, pCard):
-        #TODO
+        # TODO
+        pass
 
-     # Create an instance of Observation to represent the current state of the environment
+    # Create an instance of Observation to represent the current state of the environment
     def createObservation(self):
 
-        obs = Observation(self.createArea(), self.createPosition(), self.createFinance());
+        obs = Observation(self.createArea(), self.createPosition(), self.createFinance())
 
         return obs
 
@@ -235,7 +236,7 @@ class RLEnvironment:
 
         finance = ObsFinance()
 
-        total = 0;
+        total = 0
 
         for i in range(len(self.gamePlayers)):
             total += self.methods.mActions.caclulateAllAssets(i)
@@ -244,9 +245,9 @@ class RLEnvironment:
 
         # Current player's money / Total money
         finance.relativeAssets = assets / total
-        finance.relativePlayersMoney = self.smoothFunction(self.gamePlayers[self.currentPlayer].money, 1500);
+        finance.relativePlayersMoney = self.smoothFunction(self.gamePlayers[self.currentPlayer].money, 1500)
 
-        return finance;
+        return finance
 
     # create a new area instance based on the current game's data
     def createArea(self):
@@ -281,7 +282,7 @@ class RLEnvironment:
 
                         if groupInfo[i, 1] == 12:
 
-                            alivePlayers = 0;
+                            alivePlayers = 0
                             for k in range(self.currentPlayers):
 
                                 if (self.gamePlayers[k].isAlive()) and (k != self.currentPlayer):
@@ -296,7 +297,7 @@ class RLEnvironment:
             else:
 
                 gr = self.gameCardsGroup[i].split(',')
-                mortCounter = 0;
+                mortCounter = 0
 
                 tmp = self.buildings[int(self.gameCardsGroup[i].split(',')[len(self.gameCardsGroup[i].split(',')) - 1])]
 
@@ -304,22 +305,22 @@ class RLEnvironment:
 
                     for j in range(len(gr)):
 
-                    if self.gamePlayers[self.currentPlayer].mortgagedProperties[int(gr[j].ToString()).index()] == 1:
-                        mortCounter = mortCounter +1
+                        if self.gamePlayers[self.currentPlayer].mortgagedProperties[int(gr[j].ToString()).index()] == 1:
+                            mortCounter = mortCounter +1
 
 
 
-                groupInfo[i, 1] = 0;
-                groupInfo[i, 0] = 12 + tmp;
+                groupInfo[i, 1] = 0
+                groupInfo[i, 0] = 12 + tmp
                 if mortCounter > 0:
-                    groupInfo[i, 0] = 12 - int(12 / len(self.gameCardsGroup[i].split(',')) * mortCounter);
+                    groupInfo[i, 0] = 12 - int(12 / len(self.gameCardsGroup[i].split(',')) * mortCounter)
 
 
 
                 else:
 
-                    groupInfo[i, 0] = 0;
-                    groupInfo[i, 1] = 12 + tmp;
+                    groupInfo[i, 0] = 0
+                    groupInfo[i, 1] = 12 + tmp
 
 
 
@@ -345,7 +346,7 @@ class RLEnvironment:
                     if self.gamePlayers[player].mortgagedProperties[i.index()] == 0:
                         reward  = reward + 1
                         if self.buildings[i] > 0:
-                            reward += self.buildings[i];
+                            reward += self.buildings[i]
 
 
 
@@ -387,7 +388,7 @@ class RLEnvironment:
 
         reward = reward + (1 / alivePlayers) * assetFactor
 
-        return reward;
+        return reward
 
     # Calculate reward in [-1, 1]
     def smoothFunction(self, x, factor):
@@ -404,7 +405,7 @@ class RLEnvironment:
     def shuffle(self, list):
 
         rng = random.randomint()
-        n = list.Count;
+        n = list.Count
         while n > 1:
 
             n = n-1
@@ -418,10 +419,10 @@ class RLEnvironment:
 
     # Load an already created agent
     def NetworkloadNeural(self, path):
-
-        pass #todo
-
-    return network
+        # todo
+        # return networl
+        pass
+        return
 
 
 
@@ -442,7 +443,7 @@ class RLEnvironment:
 
         # Count all the number of property cards that are between the start of the
         # board and player's current position
-        counter = 0;
+        counter = 0
 
         for i in range(self.currentPosition):
 
@@ -455,37 +456,37 @@ class RLEnvironment:
     # Move current player on board
     def movePlayer(self, playerToMove):
 
-        System.Threading.Thread.Sleep(10);
+        # System.Threading.Thread.Sleep(10)
 
         #Calculate the positions to move
         rnd = random.randint(1,100)
-        dice1 = rnd.Next(1, 10000) % 6 + 1;
-        dice2 = rnd.Next(1, 10000) % 6 + 1;
+        dice1 = rnd.Next(1, 10000) % 6 + 1
+        dice2 = rnd.Next(1, 10000) % 6 + 1
 
-        dice = dice1 + dice2;
+        dice = dice1 + dice2
 
         if (self.currentPosition + dice) > 39:
 
             if dice != dice2:
-                self.gamePlayers[playerToMove].money += 200;
+                self.gamePlayers[playerToMove].money += 200
             else:
 
                 if self.doublesInRow < 2:
-                    self.gamePlayers[playerToMove].money += 200;
+                    self.gamePlayers[playerToMove].money += 200
 
 
 
             # Move the player
-            currentPosition = self.gamePlayers[playerToMove].position + dice;
-            currentPosition = currentPosition % 40;
+            currentPosition = self.gamePlayers[playerToMove].position + dice
+            currentPosition = currentPosition % 40
 
             # Change current 's player current position
-            self.gamePlayers[playerToMove].position = currentPosition;
+            self.gamePlayers[playerToMove].position = currentPosition
 
             if dice1 == dice2:
                 self.doublesInRow = self.doublesInRow + 1
             else:
-                self.doublesInRow = 0;
+                self.doublesInRow = 0
 
     # Check whether the user has to pay rent for the current property
     def onPositionChanged(self):
@@ -516,28 +517,28 @@ class RLEnvironment:
 
                 # Railway
                 if self.getCardFromPosition(self.currentPosition).getGroup() == 1:
-                    counter = -1;
+                    counter = -1
                     for s in self.gameCardsGroup[1].split(','):
                         if self.properties[int(s)] == owner:
                             counter = counter + 1
 
 
-                    amount = self.gameCards[selg.getIndexFromPosition(self.currentPosition)].rent[counter]
+                    amount = self.gameCards[self.getIndexFromPosition(self.currentPosition)].rent[counter]
 
                     if self.methods.mActions.payMoney(self.currentPlayer, owner, int(amount)) < 0:
 
-                    # If the player can't pay then remove him from the game
-                    self.removePlayer(self.currentPlayer)
-                    self.gamePlayers[owner].money += self.gamePlayers[self.currentPlayer].money
-                    for i in range(len(self.gameCards)):
+                        # If the player can't pay then remove him from the game
+                        self.removePlayer(self.currentPlayer)
+                        self.gamePlayers[owner].money += self.gamePlayers[self.currentPlayer].money
+                        for i in range(len(self.gameCards)):
 
-                        if self.gamePlayers[self.currentPlayer].propertiesPurchased[i] == 1:
+                            if self.gamePlayers[self.currentPlayer].propertiesPurchased[i] == 1:
 
-                    self.gamePlayers[owner].propertiesPurchased[i] = 1
-                    self.properties[self.gameCards[i].getPosition()] = owner
-                    if self.gamePlayers[self.currentPlayer].mortgagedProperties[i] == 1:
-                        self.gamePlayers[owner].mortgagedProperties[i] = 1
-                    self.methods.mActions.checkIfCompleted(owner, self.gameCards[i].getPosition())
+                                self.gamePlayers[owner].propertiesPurchased[i] = 1
+                                self.properties[self.gameCards[i].getPosition()] = owner
+                                if self.gamePlayers[self.currentPlayer].mortgagedProperties[i] == 1:
+                                    self.gamePlayers[owner].mortgagedProperties[i] = 1
+                                self.methods.mActions.checkIfCompleted(owner, self.gameCards[i].getPosition())
 
     # Apply command card
     def onCommandCard(self):
@@ -546,7 +547,7 @@ class RLEnvironment:
 
         # Take the 1st card of the list, apply it to the game and then move it to the last position
             self.applyCommandCard(self.communityChestCards[0])
-            self.moveCommunityChestCard();
+            self.moveCommunityChestCard()
 
         else:
             # Take the !st card of the list, apply it to the game and then move it to the last position
@@ -557,13 +558,13 @@ class RLEnvironment:
     # Move 1st community chest card to the last position
     def moveCommunityChestCard(self):
 
-        self.communityChestCards.Add(self.communityChestCards[0]);
-        self.communityChestCards.RemoveAt(0);
+        self.communityChestCards.Add(self.communityChestCards[0])
+        self.communityChestCards.RemoveAt(0)
 
     # Move 1st chance card to the last position
     def moveChanceCard(self):
-        self.chanceCards.Add(self.chanceCards[0]);
-        self.chanceCards.RemoveAt(0);
+        self.chanceCards.Add(self.chanceCards[0])
+        self.chanceCards.RemoveAt(0)
 
     # Apply a command card to the game state
     def applyCommandCard(self,commandCard):
@@ -594,7 +595,7 @@ class RLEnvironment:
                 if commandCard.collect > 0:
 
                     if moveTo - self.currentPosition <= 0:
-                        self.gamePlayers[self.currentPlayer].money += commandCard.moneyTransaction;
+                        self.gamePlayers[self.currentPlayer].money += commandCard.moneyTransaction
 
 
                 # Change current position
@@ -620,7 +621,7 @@ class RLEnvironment:
             if commandCard.collect == 0:
 
                 # Calculate the total amount that his has to pay
-                 moneyToPay = commandCard.moneyTransaction + commandCard.houseMultFactor * self.gamePlayers[self.currentPlayer].getTotalHouses() + commandCard.hotelMultFactor * self.gamePlayers[self.currentPlayer].getTotalHotels();
+                moneyToPay = commandCard.moneyTransaction + commandCard.houseMultFactor * self.gamePlayers[self.currentPlayer].getTotalHouses() + commandCard.hotelMultFactor * self.gamePlayers[self.currentPlayer].getTotalHotels()
 
                 # Check wheter the player has the money to pay for his fine
                 # If not then he has to declare bankruptchy and exit the game
@@ -631,7 +632,7 @@ class RLEnvironment:
 
                         if self.gamePlayers[self.currentPlayer].propertiesPurchased[i] == 1:
 
-                            self.biddingWar(self.gameCards[i].getPosition());
+                            self.biddingWar(self.gameCards[i].getPosition())
 
     # Get money from every player other than the current and add them to his balance
 
@@ -644,8 +645,8 @@ class RLEnvironment:
                 if self.methods.mActions.payMoney(i, self.currentPlayer, p) < 0:
 
                     # If the player can't pay then remove him from the game
-                    self.removePlayer(i);
-                    self.gamePlayers[self.currentPlayer].money += self.gamePlayers[i].money;
+                    self.removePlayer(i)
+                    self.gamePlayers[self.currentPlayer].money += self.gamePlayers[i].money
 
                     for j in range(self.gamecards):
                         if self.gamePlayers[i].propertiesPurchased[j] == 1:
@@ -673,7 +674,7 @@ class RLEnvironment:
     # Act accordingly when a player lands on a special posotion on board
     def onSpecialPosition(self):
 
-        # Special Position: {0, 4, 10, 20, 30, 38};
+        # Special Position: {0, 4, 10, 20, 30, 38}
 
         # go
         if self.currentPosition == 0:
@@ -720,7 +721,7 @@ class RLEnvironment:
             if self.methods.mActions.payMoney(self.currentPlayer, -1, 75) < 0:
 
                 # Remove him from game
-                self.removePlayer(self.currentPlayer);
+                self.removePlayer(self.currentPlayer)
                 for i in range(self.gameCards):
 
                     if self.gamePlayers[self.currentPlayer].propertiesPurchased[i] == 1:
@@ -730,18 +731,18 @@ class RLEnvironment:
     # If the player is in jail then try to get out
     def inJailPosition(self):
 
-        System.Threading.Thread.Sleep(5);
+        # System.Threading.Thread.Sleep(5)
         rnd = random.randint(1,100)
 
-        dice1 = rnd.Next(1, 10000) % 6 + 1;
-        dice2 = rnd.Next(1, 10000) % 6 + 1;
+        dice1 = rnd.Next(1, 10000) % 6 + 1
+        dice2 = rnd.Next(1, 10000) % 6 + 1
 
         # Get gim out of jail
         if dice1 == dice2:
 
-            self.doublesInRow = 0;
-            self.getOutOfJailTries[self.currentPlayer] = 0;
-            self.gamePlayers[self.currentPlayer].inJail = False;
+            self.doublesInRow = 0
+            self.getOutOfJailTries[self.currentPlayer] = 0
+            self.gamePlayers[self.currentPlayer].inJail = False
 
         else:
 
@@ -753,9 +754,9 @@ class RLEnvironment:
         # If maximum tries have been reached then pay the fine and get out normally
         if self.getOutOfJailTries[self.currentPlayer]==3:
 
-            if (methods.mActions.payMoney(currentPlayer, -1, 50) > 0)
+            if self.methods.mActions.payMoney(self.currentPlayer, -1, 50) > 0:
 
-                self.doublesInRow = 0;
+                self.doublesInRow = 0
                 self.getOutOfJailTries[self.currentPlayer] = 0
                 self.gamePlayers[self.currentPlayer].inJail = False
 
@@ -773,7 +774,7 @@ class RLEnvironment:
                 self.env_selectNextAgent()
 
         # If he isn't in jail then act as if it is a normal turn
-        if !self.gamePlayers[self.currentPlayer].inJail:
+        if not self.gamePlayers[self.currentPlayer].inJail:
             self.playGame()
 
 
@@ -815,25 +816,25 @@ class RLEnvironment:
         for i in range(self.currentPlayers):
 
             self.gamePlayers.Add(RLAgent())
-            System.Threading.Thread.Sleep(100);
+            # System.Threading.Thread.Sleep(100)
 
-            self.gamePlayers[i].agent_init('q', False, "Agent" + i.to_string(), (23));
+            self.gamePlayers[i].agent_init('q', False, "Agent" + i.to_string(), (23))
             #agent type(random-qlearning, policyFrozen, name, input vector length
 
-            averageMoney[i] = 0;
+            averageMoney[i] = 0
 
 
         # Initialize stopwatch
-        timer = Stopwatch();
+        timer = Stopwatch()
 
         # Set total games
-        self.totalGames = 1001;
+        self.totalGames = 1001
 
         # Start the games
         for self.currentGame in range(self.totalGames):
-            System.Threading.Thread.Sleep(100);
+            # System.Threading.Thread.Sleep(100)
 
-            Awriter.WriteLine("---------------------------------");
+            self.Awriter.write("---------------------------------"+"\n")
 
             # Reset and start the timer
             timer.Reset()
@@ -858,36 +859,36 @@ class RLEnvironment:
         # Cleanup agents
         self.env_cleanup()
 
-        Awriter.Close()
+        self.Awriter.Close()
 
     # Start playing the game
     def env_start(self):
 
-        System.Threading.Thread.Sleep(100);
+        # System.Threading.Thread.Sleep(100)
 
-    # Start new game
-    self.initGameParameters()
+        # Start new game
+        self.initGameParameters()
 
-    # First player to play
+        # First player to play
 
-    firstPlayer = random.randint(0,self.currentPlayers)
+        firstPlayer = random.randint(0,self.currentPlayers)
 
-    # Play the first move of every agent
-    for self.currentPlayer in range(self.currentPlayers):
+        # Play the first move of every agent
+        for self.currentPlayer in range(self.currentPlayers):
 
-        self.playFirstMoves((firstPlayer + self.currentPlayer) % self.currentPlayers)
+            self.playFirstMoves((firstPlayer + self.currentPlayer) % self.currentPlayers)
 
-    # Set the current player
-    self.currentPlayer = firstPlayer
+        # Set the current player
+        self.currentPlayer = firstPlayer
 
-    # Start playing the game until it's finished
-    while (!self.env_gameIsOver()):
+        # Start playing the game until it's finished
+        while not self.env_gameIsOver():
 
-        self.playGame()
+            self.playGame()
 
 
-    # End of game
-    self.env_end()
+        # End of game
+        self.env_end()
 
 
 
@@ -897,11 +898,11 @@ class RLEnvironment:
         self.moves.Add(self.stepCounter)
 
         # Stop the timer
-        self.timer.Stop();
+        self.timer.Stop()
 
         self.tmp = self.timer.ElapsedMilliseconds
         self.times.Add(self.tmp)
-        found = False;
+        found = False
 
         # Find the last alive agent and send his reward signal
         for i in range(self.gamePlayers):
@@ -936,7 +937,7 @@ class RLEnvironment:
 
 
         # For some reason it's freaking freezing...
-        System.Threading.Thread.Sleep(15);
+        # System.Threading.Thread.Sleep(15)
 
         # Since it's a new player he definately hasn't rolled any doubles yet
         self.doublesInRow = 0
@@ -966,7 +967,7 @@ class RLEnvironment:
         for i in range(self.gamePlayers):
 
             if self.gamePlayers[i].isAlive():
-            counter = counter + 1
+                counter = counter + 1
 
 
             # If there are more than one player then the game isn't over yet
@@ -980,24 +981,23 @@ class RLEnvironment:
     def env_cleanup(self):
 
         # Print average money of every player
-            TextWriter
-            averageMoneyWriter = new
-            StreamWriter("txt/AverageMoney.txt");
+        averageMoneyWriter = open("txt/AverageMoney.txt")
 
-            for i in range(self.currentPlayers):
-                averageMoneyWriter.WriteLine((self.averageMoney[i] / self.totalGames).ToString())
+        for i in range(self.currentPlayers):
+            averageMoneyWriter.WriteLine((self.averageMoney[i] / self.totalGames).ToString())
 
-            averageMoneyWriter.Close()
+        averageMoneyWriter.Close()
 
-            # Dispose agent and save neural networks
+        # Dispose agent and save neural networks
 
-            for i in range(self.currentPlayers):
+        for i in range(self.currentPlayers):
 
-                self.gamePlayers[i].saveOnFile("agents/nnFinalNeural--" + i.ToString() + ".dat")
-                self.gamePlayers[i].agent_cleanup()
+            self.gamePlayers[i].saveOnFile("agents/nnFinalNeural--" + i.ToString() + ".dat")
+            self.gamePlayers[i].agent_cleanup()
 
+        print('Experiment finished')
+        # MessageBox.Show("Experiment finished")
 
-            MessageBox.Show("Experiment finished")
     # Initiliaze game parameters
     def initGameParameters(self):
 
@@ -1021,10 +1021,10 @@ class RLEnvironment:
         # Set Command Cards(both Community Chest and Chance cards )
         self.initMethods.setCommandsCards()
 
-        // Set Property Cards
+        # Set Property Cards
         self.initMethods.setPropertyCards()
 
-        // Create information for every position on board
+        # Create information for every position on board
         self.initMethods.setBoard()
 
         self.getOutOfJailTries = []
@@ -1047,21 +1047,21 @@ class RLEnvironment:
     # Play first move of the game
     def playFirstMoves(self,i):
         # move the current player
-            self.movePlayer(i)
-            group = -1
+        self.movePlayer(i)
+        group = -1
 
-            if self.board.typeId[currentPosition] == 0:
-                            group = self.getCardFromPosition(currentPosition).getGroup()
+        if self.board.typeId[self.currentPosition] == 0:
+            group = self.getCardFromPosition(self.currentPosition).getGroup()
 
-        #Create an instance of the observation class
 
-        obs = createObservation()
+        # Create an instance of the observation class
+        obs = self.createObservation()
 
         # Integer array to specify the actions
 
         action = 0
         # Pause thread
-        System.Threading.Thread.Sleep(15);
+        # System.Threading.Thread.Sleep(15)
 
         # If the current player is agent then sent him a message
         action = self.gamePlayers[self.currentPlayer].agent_start(obs)
@@ -1102,7 +1102,7 @@ class RLEnvironment:
                     self.env_selectNextAgent()
 
                 else:
-                    self.moved = True;
+                    self.moved = True
 
                     # While the player hasn't moved from a command card and his is still alive ( in case he has paid something)
                     while (self.moved and self.gamePlayers[self.currentPlayer].isAlive) and (not self.gamePlayers[self.currentPlayer].inJail):
@@ -1153,10 +1153,10 @@ class RLEnvironment:
                     if ableToAct:
 
                         # Integer to specify the action
-                        action = 0;
+                        action = 0
 
                         # Pause thread
-                        System.Threading.Thread.Sleep(20);
+                        # System.Threading.Thread.Sleep(20)
 
                         # Create an instance of the observation class
 
@@ -1170,7 +1170,7 @@ class RLEnvironment:
                         action = self.gamePlayers[self.currentPlayer].agent_step(obs, self.calculateReward(self.currentPlayer))
 
                         if self.currentPlayer == 0:
-                            Awriter.WriteLine(action.ToString() + " -- " + group.ToString());
+                            self.Awriter.write(action.ToString() + " -- " + group.ToString())
 
                             if action == 0:
                                 set = {action, group}
@@ -1181,11 +1181,11 @@ class RLEnvironment:
 
                         for i in range(getList):
 
-                            System.Threading.Thread.Sleep(5)
+                            # System.Threading.Thread.Sleep(5)
                             self.methods.receiveAction(getList[i])
 
                         for i in range(spendList):
-                            System.Threading.Thread.Sleep(5)
+                            # System.Threading.Thread.Sleep(5)
                             self.methods.receiveAction(spendList[i])
 
 
@@ -1234,7 +1234,7 @@ class RLEnvironment:
             for i in range(self.currentPlayers):
                 if self.gamePlayers[i].isAlive:
                     # Pause thread
-                    System.Threading.Thread.Sleep(20)
+                    # System.Threading.Thread.Sleep(20)
 
                     specObs = self.createObservation()
 
@@ -1247,27 +1247,27 @@ class RLEnvironment:
                         total += self.methods.mActions.caclulateAllAssets(j)
 
 
-                    total += (getCardFromPosition(currentPosition).getMortgageValue() - bid);
+                    total += self.getCardFromPosition(currentPosition).getMortgageValue() - bid
 
-                    double assets = (double)(((methods.mActions.caclulateAllAssets(i) + (getCardFromPosition(currentPosition).getMortgageValue() - bid))));
+                    assets = self.methods.mActions.caclulateAllAssets(i) + self.getCardFromPosition(self.currentPosition).getMortgageValue() - bid
 
-                    // Current player's money / Total money
-                    specObs.finance.relativeAssets = assets / total;
+                    # Current player's money / Total money
+                    specObs.finance.relativeAssets = assets / total
+
+                    # Current player's money / Total money
+                    specObs.finance.relativePlayersMoney = self.smoothFunction(self.gamePlayers[i].money - bid, 1500)
+
+                    # Relative players position
+                    specObs.position.relativePlayersArea = (group + 1) / 10
+
+                    specObs.area.gameGroupInfo[group, 0] += (self.gameCardsGroup[group].Split(',').Length / 12) / 17
 
 
-                    // Current player's money / Total money
-                    specObs.finance.relativePlayersMoney = smoothFunction(gamePlayers[i].money - bid, 1500);
+                    action = self.gamePlayers[i].agent_step(specObs, self.calculateReward(i))
 
-                    // Relative players position
-                    specObs.position.relativePlayersArea = (double)((double)(group + 1) / 10);
-
-                    specObs.area.gameGroupInfo[group, 0] += (gameCardsGroup[group].Split(',').Length / 12) / 17;
-
-
-                    int action = gamePlayers[i].agent_step(specObs, calculateReward(i));
-
-                    if (i.Equals(0))
-                    Awriter.WriteLine("BiddingTime " + action.ToString() + " -- " + group.ToString());
+                    if i == 0:
+                        # Remove comment
+                        self.Awriter.write("BiddingTime " + action.ToString() + " -- " + group.ToString())
 
                     if (action > 0) and (self.gamePlayers[i].money >= bid):
 
@@ -1300,38 +1300,30 @@ class RLEnvironment:
             self.methods.mActions.checkIfCompleted(higherBidder, self.currentPosition)
 
 
-        # Print experiment's info
-        def printInfo(self):
-            # Check whether the directory exists or not
-            if (!Directory.Exists("txt/"))
-                Directory.CreateDirectory("txt/");
+    # Print experiment's info
+    def printInfo(self):
 
-            # Create streamwriter for the output file
-            textWriter = new StreamWriter("txt/output.txt");
-            TextWriter winner = new StreamWriter("txt/winners.txt");
-            TextWriter move = new StreamWriter("txt/moves.txt");
+        # Check whether the directory exists or not
+        if not os.path.exists("txt/"):
+            os.makedirs("txt/")
 
-            textWriter.WriteLine("=========== RL AGENTS =============");
-            textWriter.WriteLine("Game----Time-----Winnner-----Moves-");
-            for (int i = 0; i < winners.Count; i++)
-            {
-                textWriter.WriteLine(
-                (i + 1).ToString() + "        " + (times[i] / 1000).ToString() + "        " + winners[
-                    i] + "     " + moves[i].ToString());
-                winner.WriteLine(winners[i].ToString());
-                move.WriteLine(moves[i].ToString());
-            }
+        # Create streamwriter for the output file
+        textWriter = open("txt/output.txt")
+        winner = open("txt/winners.txt")
+        move = open("txt/moves.txt")
 
-            move.Close();
-            winner.Close();
+        textWriter.write("=========== RL AGENTS =============")
+        textWriter.write("Game----Time-----Winnner-----Moves-")
+        for i in range(len(self.winners)):
 
-            }
+            textWriter.write(
+            (i + 1).ToString() + "        " + (self.times[i] / 1000).ToString() + "        " + self.winners[
+                i] + "        " + self.moves[i].ToString())
+            winner.write(self.winners[i].ToString())
+            move.write(self.moves[i].ToString())
 
-            # endregion Environment
+        winner.Close()
 
-            # endregion RLMethods
-
-            }
 
 
 
