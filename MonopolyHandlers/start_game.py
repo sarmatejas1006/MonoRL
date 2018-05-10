@@ -5,7 +5,7 @@ from HelperUtils.applicaiton_context import ApplicationContext
 
 class StartGame(object):
 
-    def initiate_game(self):\
+    def initiate_game(self):
 
         ApplicationContext().get_instance().env_init()
         ApplicationContext().get_instance().playGame()
