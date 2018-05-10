@@ -9,6 +9,7 @@ from RLClasses.obsPosition import ObsPosition
 from RLClasses.obsArea import ObsArea
 from RLClasses.obsFinance import ObsFinance
 from RLHandlers.rlAgent import RLAgent
+from HelperUtils.stopwatch import Stopwatch
 import os
 import math
 import random
@@ -1039,7 +1040,7 @@ class RLEnvironment:
             for i in range(len(self.gameCardsGroup)):
                 self.completedGroups[i] = -1
 
-                for i in range(self.gamePlayers):
+            for i in range(self.gamePlayers):
                 self.getOutOfJailTries[i] = 0
                 self.playerMoves[i] = 1
 

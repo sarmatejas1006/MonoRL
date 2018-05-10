@@ -4,7 +4,7 @@ from Classes.card import Card
 from Classes.specialPositonCard import SpecialPositionCard
 from Classes.commandCard import CommandCard
 from Classes.propertyCard import PropertyCard
-from RLHandlers.rlEnvironment import  RLEnvironment
+from HelperUtils.applicaiton_context import ApplicationContext
 from Classes.board import Board
 
 
@@ -13,7 +13,7 @@ class InitMethods(object):
     # ######### Region SetMethods #########
 
     def __init__(self):
-        self.rlEnvironment = RLEnvironment()
+
         self.file_name_command = 'Data/CommandCards.xml'
         self.file_name_property = 'Data/Properties.xml'
 
@@ -30,8 +30,8 @@ class InitMethods(object):
                     p_card = CommandCard(node.find('TypeOfCard').text, node.find('Text').text, node.find('FixedMove').text,
                                           node.find('Collect').text, node.find('MoneyTransaction').text, node.find('PlayersInteraction').text,
                                           node.find('HouseMultFactor').text, node.find('HotelMultFactor').text)
-                    self.rlEnvironment.addCommandCard(p_card)
-                    self.rlEnvironment.setCommandCards()
+                    ApplicationContext().get_instance().addCommandCard(p_card)
+                    ApplicationContext().get_instance().setCommandCards()
 
         except Exception as e:
             print('Exception encountered: ', str(e))
@@ -60,8 +60,8 @@ class InitMethods(object):
                                           node.find('HouseCost').text,
                                           node.find('HotelCost').text, node.find('Group').text)
 
-                    self.rlEnvironment.addPropertyCard(p_card)
-                    self.rlEnvironment.setPropertyCards()
+                    ApplicationContext().get_instance().addPropertyCard(p_card)
+                    ApplicationContext().get_instance().setPropertyCards()
 
         except Exception as e:
             print('Exception encountered: ', str(e))
@@ -79,20 +79,20 @@ class InitMethods(object):
 
         # Add PropertyCards
 
-        for i in range(len(self.rlEnvironment.getCards())):
-            b[self.rlEnvironment.getCards()[i].getPosition()] = self.rlEnvironment.getCards()[i]
-            t[self.rlEnvironment.getCards()[i].getPosition()] = 0
+        for i in range(len(ApplicationContext().get_instance().getCards())):
+            b[ApplicationContext().get_instance().getCards()[i].getPosition()] = ApplicationContext().get_instance().getCards()[i]
+            t[ApplicationContext().get_instance().getCards()[i].getPosition()] = 0
 
         # Add CommunityChestCards
 
-        for i in range(len(self.rlEnvironment.getCommunityCardPositions())):
-            b[self.rlEnvironment.getCommunityCardPositions()[i]] = CommandCard()
-            t[self.rlEnvironment.getCommunityCardPositions()[i]] = 1
+        for i in range(len(ApplicationContext().get_instance().getCommunityCardPositions())):
+            b[ApplicationContext().get_instance().getCommunityCardPositions()[i]] = CommandCard()
+            t[ApplicationContext().get_instance().getCommunityCardPositions()[i]] = 1
 
         # Add ChanceCards
-        for i in range(len(self.rlEnvironment.getChanceCardPositions())):
-            b[self.rlEnvironment.getChanceCardPositions()[i]] = CommandCard()
-            t[self.rlEnvironment.getChanceCardPositions()[i]] = 2
+        for i in range(len(ApplicationContext().get_instance().getChanceCardPositions())):
+            b[ApplicationContext().get_instance().getChanceCardPositions()[i]] = CommandCard()
+            t[ApplicationContext().get_instance().getChanceCardPositions()[i]] = 2
 
         b = [Card() for i in range(40)]  # empty card array
         t = [-1] * 40  # int array of -1
@@ -105,5 +105,5 @@ class InitMethods(object):
                 b[i] = SpecialPositionCard()
 
         # Set the global board parameter
-                self.rlEnvironment.setBoard(Board(b, t))
-        pass
+        ApplicationContext().get_instance().setBoard(Board(b, t))
+
